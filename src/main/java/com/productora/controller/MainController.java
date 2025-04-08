@@ -56,7 +56,7 @@ public class MainController implements Initializable {
      */
     @FXML
     private void onEpisodiosAction(ActionEvent event) {
-        mostrarMensajeNoImplementado("Vista de Episodios");
+        cargarVista("/fxml/EpisodioView.fxml", "Vista de Episodios");
     }
 
     /**
