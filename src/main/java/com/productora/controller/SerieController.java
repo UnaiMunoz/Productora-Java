@@ -8,24 +8,16 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
- * Controlador para la vista de Series
+ * Controlador simplificado para la vista de Series
  */
 public class SerieController implements Initializable {
 
@@ -49,12 +41,6 @@ public class SerieController implements Initializable {
 
     @FXML
     private TableColumn<Serie, Double> colRating;
-
-    @FXML
-    private TextField txtBuscar;
-    
-    @FXML
-    private ComboBox<String> cmbFiltroGenero;
 
     @FXML
     private TextField txtTitulo;
@@ -88,30 +74,13 @@ public class SerieController implements Initializable {
     
     @FXML
     private Label lblEstado;
-    
-    @FXML
-    private Label lblTotalSeries;
-    
-    @FXML
-    private Label lblRatingPromedio;
-    
-    @FXML
-    private Label lblSeriesProduccion;
 
     @FXML
     private VBox detailPane;
-    
-    @FXML
-    private BarChart<String, Number> barChartRatings;
-    
-    @FXML
-    private ComboBox<String> cmbTopSeries;
 
     private SerieDAO serieDAO;
     private ObservableList<Serie> seriesList;
     private Serie serieActual;
-
-    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -132,11 +101,6 @@ public class SerieController implements Initializable {
                 Serie.ESTADO_FINALIZADA,
                 Serie.ESTADO_CANCELADA,
                 Serie.ESTADO_PREPRODUCCION);
-                
-        // Configurar combo de top series
-        cmbTopSeries.getItems().clear();
-        cmbTopSeries.getItems().addAll("5", "10", "15", "20");
-        cmbTopSeries.setValue("10");
 
         // Configurar slider rating
         sliderRating.setMin(0);
@@ -145,15 +109,6 @@ public class SerieController implements Initializable {
         sliderRating.valueProperty().addListener((observable, oldValue, newValue) -> {
             lblRating.setText(String.format("%.1f", newValue.doubleValue()));
         });
-        
-        // Configurar combo de filtro por género
-        cargarGenerosEnCombo();
-        
-        // Configurar combo de top series
-        if (cmbTopSeries.getItems().isEmpty()) {
-            cmbTopSeries.getItems().addAll("5", "10", "15", "20");
-            cmbTopSeries.setValue("10");
-        }
 
         // Cargar series iniciales
         cargarSeries();
@@ -163,18 +118,8 @@ public class SerieController implements Initializable {
             if (newSel != null) {
                 serieActual = newSel;
                 mostrarDetalleSerie(serieActual);
-                detailPane.setVisible(true);
-            } else {
-                detailPane.setVisible(false);
             }
         });
-
-        // Inicialmente ocultar panel de detalles
-        detailPane.setVisible(false);
-        
-        // Cargar estadísticas y gráficos iniciales
-        actualizarEstadisticas();
-        actualizarGraficoRatings();
     }
 
     /**
@@ -187,29 +132,6 @@ public class SerieController implements Initializable {
         
         // Actualizar estado
         lblEstado.setText("Series cargadas: " + seriesList.size());
-    }
-    
-    /**
-     * Carga los géneros disponibles en el combo de filtro
-     */
-    private void cargarGenerosEnCombo() {
-        // Obtener la lista de series para extraer los géneros disponibles
-        List<Serie> todasLasSeries = serieDAO.getAll();
-        Set<String> generos = new HashSet<>();
-        
-        // Extraer géneros únicos de las series existentes
-        for (Serie serie : todasLasSeries) {
-            if (serie.getGenero() != null && !serie.getGenero().isEmpty()) {
-                generos.add(serie.getGenero());
-            }
-        }
-        
-        // Convertir el conjunto a una lista ordenada
-        ObservableList<String> listaGeneros = FXCollections.observableArrayList();
-        listaGeneros.add(""); // Opción vacía para mostrar todas
-        listaGeneros.addAll(generos.stream().sorted().collect(Collectors.toList()));
-        
-        cmbFiltroGenero.setItems(listaGeneros);
     }
 
     /**
@@ -233,38 +155,6 @@ public class SerieController implements Initializable {
     }
 
     /**
-     * Acción del botón buscar
-     */
-    @FXML
-    private void onBuscarAction(ActionEvent event) {
-        String termino = txtBuscar.getText().trim();
-        String genero = cmbFiltroGenero.getValue();
-        
-        // Primero obtener todas las series que coinciden con el término de búsqueda
-        List<Serie> resultados;
-        if (termino.isEmpty()) {
-            resultados = serieDAO.getAll();
-        } else {
-            resultados = serieDAO.findByTitle(termino);
-        }
-        
-        // Luego filtrar por género si es necesario
-        if (genero != null && !genero.isEmpty()) {
-            resultados = resultados.stream()
-                .filter(s -> s.getGenero() != null && s.getGenero().equals(genero))
-                .collect(Collectors.toList());
-        }
-        
-        // Actualizar la tabla
-        seriesList.clear();
-        seriesList.addAll(resultados);
-        tableSeries.setItems(seriesList);
-        
-        // Actualizar el estado
-        lblEstado.setText("Series encontradas: " + seriesList.size());
-    }
-
-    /**
      * Acción del botón nueva serie
      */
     @FXML
@@ -280,13 +170,7 @@ public class SerieController implements Initializable {
                 Serie nuevaSerie = serieDAO.create(titulo.trim());
                 seriesList.add(nuevaSerie);
                 tableSeries.getSelectionModel().select(nuevaSerie);
-                
-                // Actualizar estadísticas y gráficos
-                actualizarEstadisticas();
-                actualizarGraficoRatings();
-                
-                // Actualizar géneros en el combo
-                cargarGenerosEnCombo();
+                lblEstado.setText("Serie creada: " + nuevaSerie.getTitulo());
             }
         });
     }
@@ -297,9 +181,6 @@ public class SerieController implements Initializable {
     @FXML
     private void onGuardarAction(ActionEvent event) {
         if (serieActual != null) {
-            // Guardar el género anterior para detectar cambios
-            String generoAnterior = serieActual.getGenero();
-            
             serieActual.setTitulo(txtTitulo.getText());
             serieActual.setDescripcion(txtDescripcion.getText());
             serieActual.setGenero(txtGenero.getText());
@@ -336,16 +217,7 @@ public class SerieController implements Initializable {
             int selectedIndex = tableSeries.getSelectionModel().getSelectedIndex();
             tableSeries.getItems().set(selectedIndex, serieActual);
             
-            // Si cambió el género, actualizar el combo de filtro
-            if ((generoAnterior == null && serieActual.getGenero() != null) ||
-                (generoAnterior != null && !generoAnterior.equals(serieActual.getGenero()))) {
-                cargarGenerosEnCombo();
-            }
-            
-            // Actualizar estadísticas y gráficos
-            actualizarEstadisticas();
-            actualizarGraficoRatings();
-
+            lblEstado.setText("Serie actualizada: " + serieActual.getTitulo());
             mostrarAlerta("Éxito", "La serie se ha actualizado correctamente.");
         }
     }
@@ -366,15 +238,15 @@ public class SerieController implements Initializable {
                 boolean eliminado = serieDAO.delete(serieActual.getId());
                 if (eliminado) {
                     seriesList.remove(serieActual);
+                    lblEstado.setText("Serie eliminada: " + serieActual.getTitulo());
                     mostrarAlerta("Éxito", "La serie se ha eliminado correctamente.");
-                    detailPane.setVisible(false);
                     
-                    // Actualizar estadísticas y gráficos
-                    actualizarEstadisticas();
-                    actualizarGraficoRatings();
-                    
-                    // Actualizar géneros en el combo
-                    cargarGenerosEnCombo();
+                    // Limpiar selección
+                    if (!seriesList.isEmpty()) {
+                        tableSeries.getSelectionModel().select(0);
+                    } else {
+                        limpiarFormulario();
+                    }
                 } else {
                     mostrarAlerta("Error", "No se pudo eliminar la serie.");
                 }
@@ -383,87 +255,19 @@ public class SerieController implements Initializable {
     }
     
     /**
-     * Actualiza las estadísticas mostradas en la pestaña de estadísticas
+     * Limpia el formulario de detalles
      */
-    @FXML
-    private void onActualizarEstadisticasAction(ActionEvent event) {
-        actualizarEstadisticas();
-    }
-    
-    /**
-     * Actualiza el gráfico de ratings
-     */
-    @FXML
-    private void onActualizarGraficoAction(ActionEvent event) {
-        actualizarGraficoRatings();
-    }
-    
-    /**
-     * Actualiza las estadísticas
-     */
-    private void actualizarEstadisticas() {
-        List<Serie> todasLasSeries = serieDAO.getAll();
-        
-        // Total de series
-        int totalSeries = todasLasSeries.size();
-        lblTotalSeries.setText(String.valueOf(totalSeries));
-        
-        // Rating promedio
-        double sumaRatings = 0;
-        int seriesConRating = 0;
-        
-        // Series en producción
-        int seriesEnProduccion = 0;
-        
-        for (Serie serie : todasLasSeries) {
-            if (serie.getRating() != null) {
-                sumaRatings += serie.getRating();
-                seriesConRating++;
-            }
-            
-            if (Serie.ESTADO_PRODUCCION.equals(serie.getEstado())) {
-                seriesEnProduccion++;
-            }
-        }
-        
-        double ratingPromedio = seriesConRating > 0 ? sumaRatings / seriesConRating : 0;
-        lblRatingPromedio.setText(String.format("%.1f", ratingPromedio));
-        
-        lblSeriesProduccion.setText(String.valueOf(seriesEnProduccion));
-    }
-    
-    /**
-     * Actualiza el gráfico de ratings
-     */
-    private void actualizarGraficoRatings() {
-        // Limpiar gráfico existente
-        barChartRatings.getData().clear();
-        
-        // Obtener el número de series a mostrar
-        int topN = 10;
-        try {
-            if (cmbTopSeries != null && cmbTopSeries.getValue() != null) {
-                topN = Integer.parseInt(cmbTopSeries.getValue());
-            }
-        } catch (NumberFormatException e) {
-            // Si hay error, usar 10 por defecto
-            topN = 10;
-        }
-        
-        // Obtener las mejores series según rating
-        List<Serie> mejoresSeries = serieDAO.getTopRated(topN);
-        
-        // Crear serie de datos para el gráfico
-        XYChart.Series<String, Number> dataSeries = new XYChart.Series<>();
-        dataSeries.setName("Rating");
-        
-        for (Serie serie : mejoresSeries) {
-            if (serie.getRating() != null) {
-                dataSeries.getData().add(new XYChart.Data<>(serie.getTitulo(), serie.getRating()));
-            }
-        }
-        
-        barChartRatings.getData().add(dataSeries);
+    private void limpiarFormulario() {
+        txtTitulo.clear();
+        txtDescripcion.clear();
+        txtGenero.clear();
+        txtAnyoInicio.clear();
+        txtAnyoFin.clear();
+        txtProductora.clear();
+        txtPresupuesto.clear();
+        cmbEstado.setValue(null);
+        sliderRating.setValue(0);
+        lblRating.setText("0.0");
     }
 
     /**
@@ -475,15 +279,5 @@ public class SerieController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
-    }
-
-    /**
-     * Acción para limpiar los campos de búsqueda y recargar series
-     */
-    @FXML
-    private void onLimpiarBusquedaAction(ActionEvent event) {
-        txtBuscar.clear();
-        cmbFiltroGenero.setValue("");
-        cargarSeries();
     }
 }
