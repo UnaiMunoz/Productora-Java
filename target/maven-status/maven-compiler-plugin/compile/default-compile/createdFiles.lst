@@ -1,0 +1,17 @@
+com\productora\controller\SerieController.class
+com\productora\controller\ActorController.class
+com\productora\controller\TemporadaController.class
+com\productora\dao\SerieDAO.class
+com\productora\model\Temporada.class
+com\productora\model\Episodio.class
+com\productora\controller\EpisodioController.class
+com\productora\model\Serie.class
+com\productora\controller\MainController.class
+com\productora\dao\ActorSerieDAO.class
+com\productora\AppData.class
+com\productora\dao\TemporadaDAO.class
+com\productora\dao\ActorDAO.class
+com\productora\dao\EpisodioDAO.class
+com\productora\Main.class
+com\productora\model\Actor.class
+com\productora\model\ActorSerie.class

@@ -26,7 +26,7 @@ public class Main extends Application {
 
         // Configurar la escena
         Scene scene = new Scene(root, 1024, 768);
-        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+        // scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 
         // Configurar y mostrar la ventana
         primaryStage.setTitle("Gestión de Productora de Series");
