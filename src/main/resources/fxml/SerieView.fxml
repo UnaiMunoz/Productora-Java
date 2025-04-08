@@ -3,20 +3,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.productora.controller.SerieController"
             prefHeight="600.0" prefWidth="800.0">
     <top>
-        <VBox spacing="10" style="-fx-background-color: #f4f4f4;">
+        <VBox spacing="8" style="-fx-background-color: #f4f4f4;">
             <padding>
-                <Insets top="15" right="15" bottom="15" left="15"/>
+                <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
             <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label text="Gestión de Series" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+                <Label text="Gestión de Series" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
                 <Pane HBox.hgrow="ALWAYS" />
-                <TextField fx:id="txtBuscar" promptText="Buscar por título..." prefWidth="250"/>
+                <TextField fx:id="txtBuscar" promptText="Buscar por título..." prefWidth="200"/>
+                <ComboBox fx:id="cmbFiltroGenero" promptText="Filtrar por género" prefWidth="150"/>
                 <Button text="Buscar" onAction="#onBuscarAction"/>
                 <Button text="Limpiar" onAction="#onLimpiarBusquedaAction"/>
                 <Button text="Nueva Serie" onAction="#onNuevaSerieAction"/>
@@ -26,70 +30,117 @@
     </top>
     
     <center>
-        <SplitPane dividerPositions="0.6" orientation="HORIZONTAL">
-            <TableView fx:id="tableSeries">
-                <columns>
-                    <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
-                    <TableColumn fx:id="colTitulo" text="Título" prefWidth="200"/>
-                    <TableColumn fx:id="colGenero" text="Género" prefWidth="100"/>
-                    <TableColumn fx:id="colAnyoInicio" text="Año Inicio" prefWidth="80"/>
-                    <TableColumn fx:id="colEstado" text="Estado" prefWidth="100"/>
-                    <TableColumn fx:id="colRating" text="Rating" prefWidth="70"/>
-                </columns>
-            </TableView>
+        <SplitPane dividerPositions="0.6" orientation="VERTICAL">
+            <SplitPane dividerPositions="0.6" orientation="HORIZONTAL">
+                <TableView fx:id="tableSeries">
+                    <columns>
+                        <TableColumn fx:id="colId" text="ID" prefWidth="40"/>
+                        <TableColumn fx:id="colTitulo" text="Título" prefWidth="200"/>
+                        <TableColumn fx:id="colGenero" text="Género" prefWidth="100"/>
+                        <TableColumn fx:id="colAnyoInicio" text="Año" prefWidth="60"/>
+                        <TableColumn fx:id="colEstado" text="Estado" prefWidth="100"/>
+                        <TableColumn fx:id="colRating" text="Rating" prefWidth="60"/>
+                    </columns>
+                </TableView>
+                
+                <VBox fx:id="detailPane" spacing="10" visible="false">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <Label text="Detalles de la Serie" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <Separator/>
+                    
+                    <Label text="Título:"/>
+                    <TextField fx:id="txtTitulo"/>
+                    
+                    <Label text="Descripción:"/>
+                    <TextArea fx:id="txtDescripcion" prefHeight="60"/>
+                    
+                    <Label text="Género:"/>
+                    <TextField fx:id="txtGenero"/>
+                    
+                    <HBox spacing="10">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label text="Año Inicio:"/>
+                            <TextField fx:id="txtAnyoInicio"/>
+                        </VBox>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label text="Año Fin:"/>
+                            <TextField fx:id="txtAnyoFin"/>
+                        </VBox>
+                    </HBox>
+                    
+                    <Label text="Productora:"/>
+                    <TextField fx:id="txtProductora"/>
+                    
+                    <Label text="Presupuesto:"/>
+                    <TextField fx:id="txtPresupuesto"/>
+                    
+                    <Label text="Estado:"/>
+                    <ComboBox fx:id="cmbEstado" prefWidth="150"/>
+                    
+                    <Label text="Rating:"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Slider fx:id="sliderRating" prefWidth="200" showTickMarks="true" showTickLabels="true" majorTickUnit="1"/>
+                        <Label fx:id="lblRating" text="0.0" style="-fx-font-weight: bold;"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Button text="Guardar Cambios" onAction="#onGuardarAction"/>
+                        <Button text="Eliminar" onAction="#onEliminarAction" style="-fx-background-color: #ff4444;"/>
+                    </HBox>
+                </VBox>
+            </SplitPane>
             
-            <VBox fx:id="detailPane" spacing="10" visible="false">
-                <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
-                </padding>
-                <Label text="Detalles de la Serie" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
-                <Separator/>
-                
-                <Label text="Título:"/>
-                <TextField fx:id="txtTitulo"/>
-                
-                <Label text="Descripción:"/>
-                <TextArea fx:id="txtDescripcion" prefHeight="80"/>
-                
-                <Label text="Género:"/>
-                <TextField fx:id="txtGenero"/>
-                
-                <HBox spacing="10">
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
-                        <Label text="Año Inicio:"/>
-                        <TextField fx:id="txtAnyoInicio"/>
+            <TabPane>
+                <Tab text="Series Mejor Valoradas" closable="false">
+                    <BorderPane>
+                        <center>
+                            <BarChart fx:id="barChartRatings" title="Top 10 Series por Rating" legendVisible="false">
+                                <xAxis>
+                                    <CategoryAxis label="Series"/>
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis label="Rating" lowerBound="0" upperBound="10" tickUnit="1"/>
+                                </yAxis>
+                            </BarChart>
+                        </center>
+                        <right>
+                            <VBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">
+                                <Label text="Opciones" style="-fx-font-weight: bold;"/>
+                                <Button text="Actualizar Gráfico" onAction="#onActualizarGraficoAction"/>
+                                <Label text="Mostrar Top:"/>
+                                <ComboBox fx:id="cmbTopSeries" prefWidth="80"/>
+                            </VBox>
+                        </right>
+                    </BorderPane>
+                </Tab>
+                <Tab text="Estadísticas" closable="false">
+                    <VBox spacing="15" alignment="CENTER" style="-fx-padding: 20;">
+                        <HBox spacing="30" alignment="CENTER">
+                            <VBox spacing="5" alignment="CENTER" style="-fx-background-color: #e8f4f8; -fx-padding: 15; -fx-background-radius: 5;">
+                                <Label text="Total Series" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="lblTotalSeries" text="0" style="-fx-font-size: 24;"/>
+                            </VBox>
+                            <VBox spacing="5" alignment="CENTER" style="-fx-background-color: #f8e8e8; -fx-padding: 15; -fx-background-radius: 5;">
+                                <Label text="Rating Promedio" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="lblRatingPromedio" text="0.0" style="-fx-font-size: 24;"/>
+                            </VBox>
+                            <VBox spacing="5" alignment="CENTER" style="-fx-background-color: #e8f8e8; -fx-padding: 15; -fx-background-radius: 5;">
+                                <Label text="Series en Producción" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="lblSeriesProduccion" text="0" style="-fx-font-size: 24;"/>
+                            </VBox>
+                        </HBox>
+                        <Button text="Actualizar Estadísticas" onAction="#onActualizarEstadisticasAction"/>
                     </VBox>
-                    <VBox spacing="5" HBox.hgrow="ALWAYS">
-                        <Label text="Año Fin:"/>
-                        <TextField fx:id="txtAnyoFin"/>
-                    </VBox>
-                </HBox>
-                
-                <Label text="Productora:"/>
-                <TextField fx:id="txtProductora"/>
-                
-                <Label text="Presupuesto:"/>
-                <TextField fx:id="txtPresupuesto"/>
-                
-                <Label text="Estado:"/>
-                <ComboBox fx:id="cmbEstado" prefWidth="150"/>
-                
-                <Label text="Rating:"/>
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Slider fx:id="sliderRating" prefWidth="200" showTickMarks="true" showTickLabels="true" majorTickUnit="1"/>
-                    <Label fx:id="lblRating" text="0.0" style="-fx-font-weight: bold;"/>
-                </HBox>
-                
-                <HBox spacing="10" alignment="CENTER_RIGHT">
-                    <Button text="Guardar Cambios" onAction="#onGuardarAction"/>
-                    <Button text="Eliminar" onAction="#onEliminarAction" style="-fx-background-color: #ff4444;"/>
-                </HBox>
-            </VBox>
+                </Tab>
+            </TabPane>
         </SplitPane>
     </center>
     
     <bottom>
         <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #f4f4f4; -fx-padding: 5;">
+            <Label fx:id="lblEstado" text="Listo" HBox.hgrow="ALWAYS" />
             <Label text="© 2025 Gestión de Productora" />
         </HBox>
     </bottom>

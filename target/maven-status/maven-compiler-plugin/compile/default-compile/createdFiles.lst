@@ -3,6 +3,7 @@ com\productora\controller\ActorController.class
 com\productora\controller\TemporadaController.class
 com\productora\dao\SerieDAO.class
 com\productora\model\Temporada.class
+com\productora\DatabaseInitializer.class
 com\productora\model\Episodio.class
 com\productora\controller\EpisodioController.class
 com\productora\model\Serie.class
