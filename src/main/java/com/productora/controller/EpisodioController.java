@@ -107,13 +107,13 @@ public class EpisodioController implements Initializable {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNumero.setCellValueFactory(new PropertyValueFactory<>("numero"));
         colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
-        
+
         // Para la duración formateamos a "XX minutos"
         colDuracion.setCellValueFactory(cellData -> {
             Integer duracion = cellData.getValue().getDuracion();
             return new ReadOnlyStringWrapper(duracion != null ? duracion + " min." : "");
         });
-        
+
         // Para la fecha de estreno formateamos a "dd/MM/yyyy"
         colFechaEstreno.setCellValueFactory(cellData -> {
             LocalDate fecha = cellData.getValue().getFechaEstreno();
@@ -123,7 +123,7 @@ public class EpisodioController implements Initializable {
                 return new ReadOnlyStringWrapper("");
             }
         });
-        
+
         colRating.setCellValueFactory(new PropertyValueFactory<>("rating"));
 
         // Configurar slider rating
@@ -147,7 +147,7 @@ public class EpisodioController implements Initializable {
                 return null; // No necesitamos convertir de String a Serie
             }
         });
-        
+
         cmbSeries.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 cargarTemporadas(newVal.getId());
@@ -169,7 +169,7 @@ public class EpisodioController implements Initializable {
                 return null; // No necesitamos convertir de String a Temporada
             }
         });
-        
+
         cmbTemporadas.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 cargarEpisodios(newVal.getId());
@@ -193,10 +193,14 @@ public class EpisodioController implements Initializable {
     private void cargarSeries() {
         List<Serie> series = serieDAO.getAll();
         cmbSeries.setItems(FXCollections.observableArrayList(series));
-        
+
         // Si hay series, seleccionar la primera por defecto
         if (!series.isEmpty()) {
             cmbSeries.getSelectionModel().select(0);
+            Serie serieSeleccionada = cmbSeries.getValue();
+            if (serieSeleccionada != null) {
+                cargarTemporadas(serieSeleccionada.getId());
+            }
         }
     }
 
@@ -208,10 +212,14 @@ public class EpisodioController implements Initializable {
     private void cargarTemporadas(int serieId) {
         List<Temporada> temporadas = temporadaDAO.getAllBySerie(serieId);
         cmbTemporadas.setItems(FXCollections.observableArrayList(temporadas));
-        
-        // Si hay temporadas, seleccionar la primera por defecto
+
+        // Si hay temporadas, seleccionar la primera por defecto y cargar sus episodios
         if (!temporadas.isEmpty()) {
             cmbTemporadas.getSelectionModel().select(0);
+            Temporada temporadaSeleccionada = cmbTemporadas.getValue();
+            if (temporadaSeleccionada != null) {
+                cargarEpisodios(temporadaSeleccionada.getId());
+            }
         } else {
             episodiosList.clear();
             tableEpisodios.setItems(episodiosList);
@@ -228,10 +236,10 @@ public class EpisodioController implements Initializable {
         episodiosList.clear();
         episodiosList.addAll(episodioDAO.getAllByTemporada(temporadaId));
         tableEpisodios.setItems(episodiosList);
-        
+
         // Actualizar estado
         lblEstado.setText("Episodios cargados: " + episodiosList.size());
-        
+
         // Limpiar formulario si no hay episodios
         if (episodiosList.isEmpty()) {
             limpiarFormulario();
@@ -320,7 +328,7 @@ public class EpisodioController implements Initializable {
             // Refrescar la tabla
             int selectedIndex = tableEpisodios.getSelectionModel().getSelectedIndex();
             tableEpisodios.getItems().set(selectedIndex, episodioActual);
-            
+
             lblEstado.setText("Episodio actualizado: " + episodioActual.getTitulo());
             mostrarAlerta("Éxito", "El episodio se ha actualizado correctamente.");
         }
@@ -344,7 +352,7 @@ public class EpisodioController implements Initializable {
                     episodiosList.remove(episodioActual);
                     lblEstado.setText("Episodio eliminado: " + episodioActual.getTitulo());
                     mostrarAlerta("Éxito", "El episodio se ha eliminado correctamente.");
-                    
+
                     // Limpiar selección o seleccionar otro episodio
                     if (!episodiosList.isEmpty()) {
                         tableEpisodios.getSelectionModel().select(0);
@@ -357,7 +365,7 @@ public class EpisodioController implements Initializable {
             }
         }
     }
-    
+
     /**
      * Limpia el formulario de detalles
      */

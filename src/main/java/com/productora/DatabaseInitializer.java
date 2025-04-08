@@ -33,17 +33,14 @@ public class DatabaseInitializer {
         boolean dbExisted = dbFile.exists();
         
         try {
-            // Si no existe, creamos el archivo de la base de datos
+            // Si la base de datos no existe, créala y configúrala
             if (!dbExisted) {
+                // Crear el archivo de la base de datos
                 dbFile.createNewFile();
                 System.out.println("Base de datos creada: " + dbPath);
-            } else {
-                System.out.println("Base de datos encontrada: " + dbPath);
-            }
-            
-            // Verificar si las tablas existen
-            if (!tableExists(dbPath, "Series")) {
-                System.out.println("Tablas no encontradas. Creando esquema...");
+                
+                // Crear las tablas
+                System.out.println("Creando esquema de la base de datos...");
                 
                 // Leer el script SQL desde un archivo
                 String sqlScript = readSqlScript("./data/db.sql");
@@ -63,8 +60,41 @@ public class DatabaseInitializer {
                     
                     System.out.println("Esquema de base de datos creado correctamente.");
                     
-                    // Opcional: Insertar datos de ejemplo solo si acabamos de crear las tablas
+                    // Insertar datos de ejemplo solo si es una nueva base de datos
+                    System.out.println("Insertando datos de ejemplo...");
                     insertSampleData(dbPath);
+                }
+            } else {
+                System.out.println("Base de datos encontrada: " + dbPath);
+                
+                // Verificar que las tablas existen
+                if (!tableExists(dbPath, "Series")) {
+                    System.out.println("Tabla Series no encontrada. Creando esquema...");
+                    
+                    // Leer el script SQL desde un archivo
+                    String sqlScript = readSqlScript("./data/db.sql");
+                    
+                    // Crear las tablas usando el script SQL
+                    String url = "jdbc:sqlite:" + dbPath;
+                    try (Connection conn = DriverManager.getConnection(url);
+                         Statement stmt = conn.createStatement()) {
+                        
+                        // Ejecutar cada sentencia SQL
+                        for (String sql : sqlScript.split(";")) {
+                            sql = sql.trim();
+                            if (!sql.isEmpty()) {
+                                stmt.execute(sql);
+                            }
+                        }
+                        
+                        System.out.println("Esquema de base de datos creado correctamente.");
+                        
+                        // Verificar si hay datos en las tablas
+                        if (isDatabaseEmpty(dbPath)) {
+                            System.out.println("Base de datos vacía. Insertando datos de ejemplo...");
+                            insertSampleData(dbPath);
+                        }
+                    }
                 }
             }
             
@@ -121,6 +151,30 @@ public class DatabaseInitializer {
     }
     
     /**
+     * Comprueba si la base de datos está vacía (no tiene datos en las tablas principales)
+     * 
+     * @param dbPath Ruta a la base de datos
+     * @return true si la base de datos está vacía, false en caso contrario
+     */
+    private static boolean isDatabaseEmpty(String dbPath) {
+        String url = "jdbc:sqlite:" + dbPath;
+        
+        try (Connection conn = DriverManager.getConnection(url);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as count FROM Series")) {
+            
+            if (rs.next()) {
+                int count = rs.getInt("count");
+                return count == 0;  // Si count es 0, la tabla está vacía
+            }
+            return true;  // Si no hay resultados, consideramos que está vacía
+        } catch (Exception e) {
+            System.err.println("Error al verificar si la base de datos está vacía: " + e.getMessage());
+            return true;  // En caso de error, asumimos que está vacía
+        }
+    }
+    
+    /**
      * Inserta datos de ejemplo en la base de datos
      * 
      * @param dbPath Ruta a la base de datos
@@ -130,6 +184,9 @@ public class DatabaseInitializer {
         
         try (Connection conn = DriverManager.getConnection(url);
              Statement stmt = conn.createStatement()) {
+            
+            // Activar las claves foráneas para asegurar integridad referencial
+            stmt.execute("PRAGMA foreign_keys = ON");
             
             // Insertar series de ejemplo
             stmt.execute("INSERT INTO Series (titulo, descripcion, genero, anyo_inicio, anyo_fin, productora, presupuesto, rating, estado) VALUES " +
@@ -146,6 +203,8 @@ public class DatabaseInitializer {
             
             stmt.execute("INSERT INTO Series (titulo, descripcion, genero, anyo_inicio, anyo_fin, productora, presupuesto, rating, estado) VALUES " +
                          "('Friends', 'Un grupo de amigos viven en Manhattan y comparten sus vidas', 'Comedia', 1994, 2004, 'NBC', 2000000, 8.9, 'Finalizada')");
+            
+            System.out.println("Series insertadas correctamente");
             
             // Insertar temporadas de ejemplo
             stmt.execute("INSERT INTO Temporadas (numero, titulo, serie_id, fecha_estreno, fecha_fin, num_episodios) VALUES " +
@@ -175,31 +234,48 @@ public class DatabaseInitializer {
             stmt.execute("INSERT INTO Temporadas (numero, titulo, serie_id, fecha_estreno, fecha_fin, num_episodios) VALUES " +
                          "(1, 'Primera Temporada', 5, '1994-09-22', '1995-05-18', 24)");
             
-            // Insertar episodios de ejemplo
+            System.out.println("Temporadas insertadas correctamente");
+            
+            // Obtener los IDs de las temporadas para usar las claves foráneas correctas
+            ResultSet rs1 = stmt.executeQuery("SELECT id FROM Temporadas WHERE serie_id = 1 AND numero = 1");
+            int temporadaBB1Id = rs1.next() ? rs1.getInt("id") : 1;
+            
+            ResultSet rs2 = stmt.executeQuery("SELECT id FROM Temporadas WHERE serie_id = 2 AND numero = 1");
+            int temporadaST1Id = rs2.next() ? rs2.getInt("id") : 4;
+            
+            ResultSet rs3 = stmt.executeQuery("SELECT id FROM Temporadas WHERE serie_id = 3 AND numero = 1");
+            int temporadaGOT1Id = rs3.next() ? rs3.getInt("id") : 6;
+            
+            ResultSet rs4 = stmt.executeQuery("SELECT id FROM Temporadas WHERE serie_id = 4 AND numero = 1");
+            int temporadaCrown1Id = rs4.next() ? rs4.getInt("id") : 8;
+            
+            // Insertar episodios de ejemplo con las claves foráneas correctas
             // Breaking Bad - Temporada 1
             stmt.execute("INSERT INTO Episodios (numero, titulo, descripcion, duracion, temporada_id, fecha_estreno, director, guionista, rating) VALUES " +
-                         "(1, 'Piloto', 'Walter White recibe un diagnóstico de cáncer y decide fabricar metanfetamina', 58, 1, '2008-01-20', 'Vince Gilligan', 'Vince Gilligan', 9.0)");
+                         "(1, 'Piloto', 'Walter White recibe un diagnóstico de cáncer y decide fabricar metanfetamina', 58, " + temporadaBB1Id + ", '2008-01-20', 'Vince Gilligan', 'Vince Gilligan', 9.0)");
             
             stmt.execute("INSERT INTO Episodios (numero, titulo, descripcion, duracion, temporada_id, fecha_estreno, director, guionista, rating) VALUES " +
-                         "(2, 'El gato está en la bolsa', 'Walt y Jesse intentan deshacerse de dos cadáveres', 48, 1, '2008-01-27', 'Adam Bernstein', 'Vince Gilligan', 8.7)");
+                         "(2, 'El gato está en la bolsa', 'Walt y Jesse intentan deshacerse de dos cadáveres', 48, " + temporadaBB1Id + ", '2008-01-27', 'Adam Bernstein', 'Vince Gilligan', 8.7)");
             
             // Stranger Things - Temporada 1
             stmt.execute("INSERT INTO Episodios (numero, titulo, descripcion, duracion, temporada_id, fecha_estreno, director, guionista, rating) VALUES " +
-                         "(1, 'Capítulo Uno: La desaparición de Will Byers', 'Un niño desaparece en Hawkins, Indiana', 47, 4, '2016-07-15', 'Hermanos Duffer', 'Hermanos Duffer', 8.6)");
+                         "(1, 'Capítulo Uno: La desaparición de Will Byers', 'Un niño desaparece en Hawkins, Indiana', 47, " + temporadaST1Id + ", '2016-07-15', 'Hermanos Duffer', 'Hermanos Duffer', 8.6)");
             
             stmt.execute("INSERT INTO Episodios (numero, titulo, descripcion, duracion, temporada_id, fecha_estreno, director, guionista, rating) VALUES " +
-                         "(2, 'Capítulo Dos: La chica rara de la calle Maple', 'Los amigos de Will encuentran a una misteriosa niña en el bosque', 55, 4, '2016-07-15', 'Hermanos Duffer', 'Hermanos Duffer', 8.5)");
+                         "(2, 'Capítulo Dos: La chica rara de la calle Maple', 'Los amigos de Will encuentran a una misteriosa niña en el bosque', 55, " + temporadaST1Id + ", '2016-07-15', 'Hermanos Duffer', 'Hermanos Duffer', 8.5)");
             
             // Game of Thrones - Temporada 1
             stmt.execute("INSERT INTO Episodios (numero, titulo, descripcion, duracion, temporada_id, fecha_estreno, director, guionista, rating) VALUES " +
-                         "(1, 'Winter Is Coming', 'Ned Stark es convocado a servir como Mano del Rey', 62, 6, '2011-04-17', 'Tim Van Patten', 'David Benioff & D. B. Weiss', 9.1)");
+                         "(1, 'Winter Is Coming', 'Ned Stark es convocado a servir como Mano del Rey', 62, " + temporadaGOT1Id + ", '2011-04-17', 'Tim Van Patten', 'David Benioff & D. B. Weiss', 9.1)");
             
             stmt.execute("INSERT INTO Episodios (numero, titulo, descripcion, duracion, temporada_id, fecha_estreno, director, guionista, rating) VALUES " +
-                         "(2, 'The Kingsroad', 'Ned y sus hijas viajan hacia el sur, mientras que Jon Snow se dirige al Muro', 56, 6, '2011-04-24', 'Tim Van Patten', 'David Benioff & D. B. Weiss', 8.8)");
+                         "(2, 'The Kingsroad', 'Ned y sus hijas viajan hacia el sur, mientras que Jon Snow se dirige al Muro', 56, " + temporadaGOT1Id + ", '2011-04-24', 'Tim Van Patten', 'David Benioff & D. B. Weiss', 8.8)");
             
             // The Crown - Temporada 1
             stmt.execute("INSERT INTO Episodios (numero, titulo, descripcion, duracion, temporada_id, fecha_estreno, director, guionista, rating) VALUES " +
-                         "(1, 'Wolferton Splash', 'Isabel se casa con Felipe en 1947, mientras que el rey Jorge VI enfrenta problemas de salud', 57, 8, '2016-11-04', 'Stephen Daldry', 'Peter Morgan', 8.7)");
+                         "(1, 'Wolferton Splash', 'Isabel se casa con Felipe en 1947, mientras que el rey Jorge VI enfrenta problemas de salud', 57, " + temporadaCrown1Id + ", '2016-11-04', 'Stephen Daldry', 'Peter Morgan', 8.7)");
+            
+            System.out.println("Episodios insertados correctamente");
             
             // Insertar actores de ejemplo
             stmt.execute("INSERT INTO Actores (nombre, apellido, fecha_nacimiento, nacionalidad, biografia) VALUES " +
@@ -228,6 +304,8 @@ public class DatabaseInitializer {
             
             stmt.execute("INSERT INTO Actores (nombre, apellido, fecha_nacimiento, nacionalidad, biografia) VALUES " +
                          "('Matthew', 'Perry', '1969-08-19', 'Estadounidense-Canadiense', 'Actor conocido por su papel de Chandler Bing en Friends')");
+            
+            System.out.println("Actores insertados correctamente");
             
             // Insertar relaciones actor-serie
             stmt.execute("INSERT INTO ActoresSeries (actor_id, serie_id, personaje, rol, temporadas_participacion) VALUES " +

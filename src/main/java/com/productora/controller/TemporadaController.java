@@ -97,7 +97,7 @@ public class TemporadaController implements Initializable {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNumero.setCellValueFactory(new PropertyValueFactory<>("numero"));
         colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
-        
+
         // Para la fecha de estreno formateamos a "dd/MM/yyyy"
         colFechaEstreno.setCellValueFactory(cellData -> {
             LocalDate fecha = cellData.getValue().getFechaEstreno();
@@ -107,7 +107,7 @@ public class TemporadaController implements Initializable {
                 return new ReadOnlyStringWrapper("");
             }
         });
-        
+
         // Para la fecha de fin formateamos a "dd/MM/yyyy"
         colFechaFin.setCellValueFactory(cellData -> {
             LocalDate fecha = cellData.getValue().getFechaFin();
@@ -117,7 +117,7 @@ public class TemporadaController implements Initializable {
                 return new ReadOnlyStringWrapper("");
             }
         });
-        
+
         colNumEpisodios.setCellValueFactory(new PropertyValueFactory<>("numEpisodios"));
 
         // Configurar ComboBox de Series
@@ -133,7 +133,7 @@ public class TemporadaController implements Initializable {
                 return null; // No necesitamos convertir de String a Serie
             }
         });
-        
+
         cmbSeries.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 cargarTemporadas(newVal.getId());
@@ -159,10 +159,14 @@ public class TemporadaController implements Initializable {
     private void cargarSeries() {
         List<Serie> series = serieDAO.getAll();
         cmbSeries.setItems(FXCollections.observableArrayList(series));
-        
-        // Si hay series, seleccionar la primera por defecto
+
+        // Si hay series, seleccionar la primera por defecto y cargar sus temporadas
         if (!series.isEmpty()) {
             cmbSeries.getSelectionModel().select(0);
+            Serie serieSeleccionada = cmbSeries.getValue();
+            if (serieSeleccionada != null) {
+                cargarTemporadas(serieSeleccionada.getId());
+            }
         }
     }
 
@@ -175,10 +179,10 @@ public class TemporadaController implements Initializable {
         temporadasList.clear();
         temporadasList.addAll(temporadaDAO.getAllBySerie(serieId));
         tableTemporadas.setItems(temporadasList);
-        
+
         // Actualizar estado
         lblEstado.setText("Temporadas cargadas: " + temporadasList.size());
-        
+
         // Limpiar formulario si no hay temporadas
         if (temporadasList.isEmpty()) {
             limpiarFormulario();
@@ -224,7 +228,7 @@ public class TemporadaController implements Initializable {
         }
 
         int nuevoNumero = temporadaDAO.getNextSeasonNumber(serie.getId());
-        
+
         TextInputDialog dialog = new TextInputDialog("Temporada " + nuevoNumero);
         dialog.setTitle("Nueva Temporada");
         dialog.setHeaderText("Crear nueva temporada para " + serie.getTitulo());
@@ -263,11 +267,11 @@ public class TemporadaController implements Initializable {
                 Episodio nuevoEpisodio = episodioDAO.create(temporadaActual.getId(), nuevoNumero, titulo.trim());
                 episodiosList.add(nuevoEpisodio);
                 lblEstado.setText("Episodio creado: " + nuevoEpisodio.getTitulo());
-                
+
                 // Actualizar el contador de episodios
                 temporadaActual.actualizarNumEpisodios();
                 txtNumEpisodios.setText(temporadaActual.getNumEpisodios().toString());
-                
+
                 // Refrescar la tabla de temporadas para mostrar el nuevo valor
                 int selectedIndex = tableTemporadas.getSelectionModel().getSelectedIndex();
                 tableTemporadas.getItems().set(selectedIndex, temporadaActual);
@@ -296,7 +300,7 @@ public class TemporadaController implements Initializable {
             // Refrescar la tabla
             int selectedIndex = tableTemporadas.getSelectionModel().getSelectedIndex();
             tableTemporadas.getItems().set(selectedIndex, temporadaActual);
-            
+
             lblEstado.setText("Temporada actualizada: " + temporadaActual.getTitulo());
             mostrarAlerta("Éxito", "La temporada se ha actualizado correctamente.");
         }
@@ -311,8 +315,9 @@ public class TemporadaController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmar eliminación");
             alert.setHeaderText("Eliminar temporada");
-            alert.setContentText("¿Está seguro que desea eliminar la temporada \"" + temporadaActual.getTitulo() + "\"?\n" +
-                                "Esta acción eliminará también todos los episodios asociados.");
+            alert.setContentText(
+                    "¿Está seguro que desea eliminar la temporada \"" + temporadaActual.getTitulo() + "\"?\n" +
+                            "Esta acción eliminará también todos los episodios asociados.");
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -322,7 +327,7 @@ public class TemporadaController implements Initializable {
                     episodiosList.clear();
                     lblEstado.setText("Temporada eliminada: " + temporadaActual.getTitulo());
                     mostrarAlerta("Éxito", "La temporada se ha eliminado correctamente.");
-                    
+
                     // Limpiar selección o seleccionar otra temporada
                     if (!temporadasList.isEmpty()) {
                         tableTemporadas.getSelectionModel().select(0);
@@ -335,7 +340,7 @@ public class TemporadaController implements Initializable {
             }
         }
     }
-    
+
     /**
      * Limpia el formulario de detalles
      */
