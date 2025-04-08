@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.productora.controller.TemporadaController"
+            prefHeight="600.0" prefWidth="800.0">
+    <top>
+        <VBox spacing="8" style="-fx-background-color: #f4f4f4;">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Gestión de Temporadas" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                <Pane HBox.hgrow="ALWAYS" />
+                <Button text="Nueva Temporada" onAction="#onNuevaTemporadaAction"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Serie:" />
+                <ComboBox fx:id="cmbSeries" prefWidth="250"/>
+            </HBox>
+            <Separator/>
+        </VBox>
+    </top>
+    
+    <center>
+        <SplitPane dividerPositions="0.5" orientation="HORIZONTAL">
+            <TableView fx:id="tableTemporadas">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="40"/>
+                    <TableColumn fx:id="colNumero" text="Nº" prefWidth="40"/>
+                    <TableColumn fx:id="colTitulo" text="Título" prefWidth="150"/>
+                    <TableColumn fx:id="colFechaEstreno" text="Fecha Estreno" prefWidth="100"/>
+                    <TableColumn fx:id="colFechaFin" text="Fecha Fin" prefWidth="100"/>
+                    <TableColumn fx:id="colNumEpisodios" text="Episodios" prefWidth="70"/>
+                </columns>
+            </TableView>
+            
+            <ScrollPane fitToWidth="true">
+                <VBox fx:id="detailPane" spacing="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <Label text="Detalles de la Temporada" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <Separator/>
+                    
+                    <Label text="Título:"/>
+                    <TextField fx:id="txtTitulo"/>
+                    
+                    <HBox spacing="10">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label text="Número:"/>
+                            <TextField fx:id="txtNumero"/>
+                        </VBox>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label text="Nº Episodios:"/>
+                            <TextField fx:id="txtNumEpisodios" disable="true" promptText="Auto-calculado"/>
+                        </VBox>
+                    </HBox>
+                    
+                    <Label text="Fecha de Estreno:"/>
+                    <DatePicker fx:id="dateFechaEstreno" prefWidth="150"/>
+                    
+                    <Label text="Fecha de Fin:"/>
+                    <DatePicker fx:id="dateFechaFin" prefWidth="150"/>
+                    
+                    <Separator />
+                    
+                    <Label text="Episodios en esta temporada:" style="-fx-font-weight: bold;"/>
+                    <ListView fx:id="listEpisodios" prefHeight="120"/>
+                    
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Button text="Nuevo Episodio" onAction="#onNuevoEpisodioAction"/>
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Button text="Guardar Cambios" onAction="#onGuardarAction"/>
+                        <Button text="Eliminar" onAction="#onEliminarAction" style="-fx-background-color: #ff4444;"/>
+                    </HBox>
+                    <padding>
+                        <Insets top="10" right="10" bottom="30" left="10"/>
+                    </padding>
+                </VBox>
+            </ScrollPane>
+        </SplitPane>
+    </center>
+    
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #f4f4f4; -fx-padding: 5;">
+            <Label fx:id="lblEstado" text="Listo" HBox.hgrow="ALWAYS" />
+        </HBox>
+    </bottom>
+</BorderPane>

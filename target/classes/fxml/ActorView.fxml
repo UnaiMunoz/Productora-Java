@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.productora.controller.ActorController"
+            prefHeight="600.0" prefWidth="800.0">
+    <top>
+        <VBox spacing="8" style="-fx-background-color: #f4f4f4;">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Gestión de Actores" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                <Pane HBox.hgrow="ALWAYS" />
+                <Button text="Nuevo Actor" onAction="#onNuevoActorAction"/>
+                <TextField fx:id="txtBuscar" promptText="Buscar actor..." prefWidth="200"/>
+                <Button text="Buscar" onAction="#onBuscarAction"/>
+            </HBox>
+            <Separator/>
+        </VBox>
+    </top>
+    
+    <center>
+        <SplitPane dividerPositions="0.5" orientation="HORIZONTAL">
+            <TableView fx:id="tableActores">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="40"/>
+                    <TableColumn fx:id="colNombre" text="Nombre" prefWidth="120"/>
+                    <TableColumn fx:id="colApellido" text="Apellido" prefWidth="120"/>
+                    <TableColumn fx:id="colNacimiento" text="Nacimiento" prefWidth="100"/>
+                    <TableColumn fx:id="colNacionalidad" text="Nacionalidad" prefWidth="100"/>
+                </columns>
+            </TableView>
+            
+            <VBox>
+                <TabPane tabClosingPolicy="UNAVAILABLE">
+                    <Tab text="Información Personal">
+                        <ScrollPane fitToWidth="true">
+                            <VBox fx:id="detailPane" spacing="10">
+                                <padding>
+                                    <Insets top="10" right="10" bottom="10" left="10"/>
+                                </padding>
+                                <Label text="Detalles del Actor" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                                <Separator/>
+                                
+                                <HBox spacing="10">
+                                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                        <Label text="Nombre:"/>
+                                        <TextField fx:id="txtNombre"/>
+                                    </VBox>
+                                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                        <Label text="Apellido:"/>
+                                        <TextField fx:id="txtApellido"/>
+                                    </VBox>
+                                </HBox>
+                                
+                                <Label text="Fecha de Nacimiento:"/>
+                                <DatePicker fx:id="dateFechaNacimiento" prefWidth="150"/>
+                                
+                                <Label text="Nacionalidad:"/>
+                                <TextField fx:id="txtNacionalidad"/>
+                                
+                                <Label text="Biografía:"/>
+                                <TextArea fx:id="txtBiografia" prefHeight="100"/>
+                                
+                                <Label text="URL de Imagen:"/>
+                                <TextField fx:id="txtImagenUrl"/>
+                                
+                                <HBox spacing="10" alignment="CENTER_RIGHT">
+                                    <Button text="Guardar Cambios" onAction="#onGuardarAction"/>
+                                    <Button text="Eliminar" onAction="#onEliminarAction" style="-fx-background-color: #ff4444;"/>
+                                </HBox>
+                            </VBox>
+                        </ScrollPane>
+                    </Tab>
+                    <Tab text="Series y Personajes">
+                        <VBox spacing="10">
+                            <padding>
+                                <Insets top="10" right="10" bottom="10" left="10"/>
+                            </padding>
+                            <Label text="Series en las que participa" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Button text="Añadir Participación" onAction="#onNuevaParticipacionAction"/>
+                                <Button text="Eliminar Participación" onAction="#onEliminarParticipacionAction"/>
+                            </HBox>
+                            <TableView fx:id="tableParticipaciones" VBox.vgrow="ALWAYS">
+                                <columns>
+                                    <TableColumn fx:id="colSerie" text="Serie" prefWidth="150"/>
+                                    <TableColumn fx:id="colPersonaje" text="Personaje" prefWidth="120"/>
+                                    <TableColumn fx:id="colRol" text="Rol" prefWidth="100"/>
+                                    <TableColumn fx:id="colTemporadas" text="Temporadas" prefWidth="100"/>
+                                </columns>
+                            </TableView>
+                        </VBox>
+                    </Tab>
+                </TabPane>
+            </VBox>
+        </SplitPane>
+    </center>
+    
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #f4f4f4; -fx-padding: 5;">
+            <Label fx:id="lblEstado" text="Listo" HBox.hgrow="ALWAYS" />
+        </HBox>
+    </bottom>
+</BorderPane>

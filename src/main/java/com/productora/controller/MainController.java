@@ -48,7 +48,7 @@ public class MainController implements Initializable {
      */
     @FXML
     private void onTemporadasAction(ActionEvent event) {
-        mostrarMensajeNoImplementado("Vista de Temporadas");
+        cargarVista("/fxml/TemporadaView.fxml", "Vista de Temporadas");
     }
 
     /**
@@ -64,7 +64,7 @@ public class MainController implements Initializable {
      */
     @FXML
     private void onActoresAction(ActionEvent event) {
-        mostrarMensajeNoImplementado("Vista de Actores");
+        cargarVista("/fxml/ActorView.fxml", "Vista de Actores");
     }
 
     /**
@@ -85,7 +85,12 @@ public class MainController implements Initializable {
         alert.setHeaderText("Sistema de Gestión de Productora");
         alert.setContentText("Esta aplicación permite gestionar series de televisión, temporadas, " +
                 "episodios y actores para una productora.\n\n" +
-                "Seleccione una opción del menú para comenzar a trabajar con los diferentes módulos.");
+                "Módulos disponibles:\n" +
+                "• Series: Administra información de series\n" +
+                "• Temporadas: Gestiona temporadas de cada serie\n" +
+                "• Episodios: Administra episodios de cada temporada\n" +
+                "• Actores: Gestiona actores y sus participaciones en series\n" +
+                "• Reportes: Genera informes y estadísticas (próximamente)");
         alert.showAndWait();
     }
 
