@@ -15,8 +15,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
+import javafx.geometry.Insets;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -132,6 +134,35 @@ public class ActorController implements Initializable {
         colRol.setCellValueFactory(new PropertyValueFactory<>("rol"));
         colTemporadas.setCellValueFactory(new PropertyValueFactory<>("temporadasParticipacion"));
 
+        // Configurar DatePicker con patrón de fecha específico
+        String pattern = "dd/MM/yyyy";
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
+
+        // Crear un conversor para el DatePicker
+        StringConverter<LocalDate> converter = new StringConverter<LocalDate>() {
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        };
+
+        // Aplicar el conversor al DatePicker
+        dateFechaNacimiento.setConverter(converter);
+        dateFechaNacimiento.setPromptText(pattern.toLowerCase());
+
         // Cargar actores iniciales
         cargarActores();
 
@@ -220,6 +251,7 @@ public class ActorController implements Initializable {
 
         // Crear campos del formulario
         GridPane grid = new GridPane();
+        grid.setPadding(new Insets(20, 150, 10, 10));
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new javafx.geometry.Insets(20, 150, 10, 10));
@@ -263,12 +295,31 @@ public class ActorController implements Initializable {
     @FXML
     private void onGuardarAction(ActionEvent event) {
         if (actorActual != null) {
-            actorActual.setNombre(txtNombre.getText());
-            actorActual.setApellido(txtApellido.getText());
+            // Validar campos obligatorios
+            if (txtNombre.getText().trim().isEmpty()) {
+                mostrarAlerta("Error", "El nombre no puede estar vacío.");
+                txtNombre.requestFocus();
+                return;
+            }
+            
+            if (txtApellido.getText().trim().isEmpty()) {
+                mostrarAlerta("Error", "El apellido no puede estar vacío.");
+                txtApellido.requestFocus();
+                return;
+            }
+            
+            actorActual.setNombre(txtNombre.getText().trim());
+            actorActual.setApellido(txtApellido.getText().trim());
             actorActual.setFechaNacimiento(dateFechaNacimiento.getValue());
-            actorActual.setNacionalidad(txtNacionalidad.getText());
-            actorActual.setBiografia(txtBiografia.getText());
-            actorActual.setImagenUrl(txtImagenUrl.getText());
+            
+            String nacionalidad = txtNacionalidad.getText().trim();
+            actorActual.setNacionalidad(nacionalidad.isEmpty() ? null : nacionalidad);
+            
+            String biografia = txtBiografia.getText().trim();
+            actorActual.setBiografia(biografia.isEmpty() ? null : biografia);
+            
+            String imagenUrl = txtImagenUrl.getText().trim();
+            actorActual.setImagenUrl(imagenUrl.isEmpty() ? null : imagenUrl);
 
             // Refrescar la tabla
             int selectedIndex = tableActores.getSelectionModel().getSelectedIndex();
@@ -334,6 +385,7 @@ public class ActorController implements Initializable {
 
         // Crear campos del formulario
         GridPane grid = new GridPane();
+        grid.setPadding(new Insets(20, 150, 10, 10));
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new javafx.geometry.Insets(20, 150, 10, 10));
@@ -449,3 +501,4 @@ public class ActorController implements Initializable {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+}   

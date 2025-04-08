@@ -175,52 +175,132 @@ public class SerieController implements Initializable {
         });
     }
 
-    /**
-     * Acción del botón guardar cambios
-     */
-    @FXML
-    private void onGuardarAction(ActionEvent event) {
-        if (serieActual != null) {
-            serieActual.setTitulo(txtTitulo.getText());
-            serieActual.setDescripcion(txtDescripcion.getText());
-            serieActual.setGenero(txtGenero.getText());
+   // En la clase SerieController.java
+// Reemplazar el método onGuardarAction con esta versión mejorada:
 
+/**
+ * Acción del botón guardar cambios
+ */
+@FXML
+private void onGuardarAction(ActionEvent event) {
+    if (serieActual != null) {
+        // Validación del título
+        String titulo = txtTitulo.getText().trim();
+        if (titulo.isEmpty()) {
+            mostrarAlerta("Error", "El título no puede estar vacío.");
+            txtTitulo.requestFocus();
+            return;
+        }
+        serieActual.setTitulo(titulo);
+        
+        // Descripción - puede ser null
+        String descripcion = txtDescripcion.getText().trim();
+        serieActual.setDescripcion(descripcion.isEmpty() ? null : descripcion);
+        
+        // Género - puede ser null
+        String genero = txtGenero.getText().trim();
+        serieActual.setGenero(genero.isEmpty() ? null : genero);
+
+        // Año de inicio - validación numérica
+        String anyoInicioStr = txtAnyoInicio.getText().trim();
+        if (!anyoInicioStr.isEmpty()) {
             try {
-                serieActual.setAnyoInicio(
-                        txtAnyoInicio.getText().isEmpty() ? null : Integer.parseInt(txtAnyoInicio.getText()));
+                int anyoInicio = Integer.parseInt(anyoInicioStr);
+                if (anyoInicio < 1900 || anyoInicio > 2100) {
+                    mostrarAlerta("Error", "El año de inicio debe estar entre 1900 y 2100.");
+                    txtAnyoInicio.requestFocus();
+                    return;
+                }
+                serieActual.setAnyoInicio(anyoInicio);
             } catch (NumberFormatException e) {
                 mostrarAlerta("Error", "El año de inicio debe ser un número válido.");
+                txtAnyoInicio.requestFocus();
                 return;
             }
+        } else {
+            serieActual.setAnyoInicio(null);
+        }
 
+        // Año de fin - validación numérica
+        String anyoFinStr = txtAnyoFin.getText().trim();
+        if (!anyoFinStr.isEmpty()) {
             try {
-                serieActual.setAnyoFin(txtAnyoFin.getText().isEmpty() ? null : Integer.parseInt(txtAnyoFin.getText()));
+                int anyoFin = Integer.parseInt(anyoFinStr);
+                if (anyoFin < 1900 || anyoFin > 2100) {
+                    mostrarAlerta("Error", "El año de fin debe estar entre 1900 y 2100.");
+                    txtAnyoFin.requestFocus();
+                    return;
+                }
+                
+                // Validar que año fin sea posterior a año inicio
+                Integer anyoInicio = serieActual.getAnyoInicio();
+                if (anyoInicio != null && anyoFin < anyoInicio) {
+                    mostrarAlerta("Error", "El año de fin debe ser posterior o igual al año de inicio.");
+                    txtAnyoFin.requestFocus();
+                    return;
+                }
+                
+                serieActual.setAnyoFin(anyoFin);
             } catch (NumberFormatException e) {
                 mostrarAlerta("Error", "El año de fin debe ser un número válido.");
+                txtAnyoFin.requestFocus();
                 return;
             }
+        } else {
+            serieActual.setAnyoFin(null);
+        }
 
-            serieActual.setProductora(txtProductora.getText());
+        // Productora - puede ser null
+        String productora = txtProductora.getText().trim();
+        serieActual.setProductora(productora.isEmpty() ? null : productora);
 
+        // Presupuesto - validación numérica
+        String presupuestoStr = txtPresupuesto.getText().trim();
+        if (!presupuestoStr.isEmpty()) {
             try {
-                serieActual.setPresupuesto(
-                        txtPresupuesto.getText().isEmpty() ? null : Double.parseDouble(txtPresupuesto.getText()));
+                double presupuesto = Double.parseDouble(presupuestoStr);
+                if (presupuesto < 0) {
+                    mostrarAlerta("Error", "El presupuesto no puede ser negativo.");
+                    txtPresupuesto.requestFocus();
+                    return;
+                }
+                serieActual.setPresupuesto(presupuesto);
             } catch (NumberFormatException e) {
                 mostrarAlerta("Error", "El presupuesto debe ser un número válido.");
+                txtPresupuesto.requestFocus();
                 return;
             }
-
-            serieActual.setEstado(cmbEstado.getValue());
-            serieActual.setRating(sliderRating.getValue() > 0 ? sliderRating.getValue() : null);
-
-            // Refrescar la tabla
-            int selectedIndex = tableSeries.getSelectionModel().getSelectedIndex();
-            tableSeries.getItems().set(selectedIndex, serieActual);
-            
-            lblEstado.setText("Serie actualizada: " + serieActual.getTitulo());
-            mostrarAlerta("Éxito", "La serie se ha actualizado correctamente.");
+        } else {
+            serieActual.setPresupuesto(null);
         }
+
+        // Estado - validamos que sea uno de los estados permitidos
+        String estado = cmbEstado.getValue();
+        if (estado != null && !estado.isEmpty()) {
+            if (!estado.equals(Serie.ESTADO_PRODUCCION) && 
+                !estado.equals(Serie.ESTADO_FINALIZADA) &&
+                !estado.equals(Serie.ESTADO_CANCELADA) &&
+                !estado.equals(Serie.ESTADO_PREPRODUCCION)) {
+                mostrarAlerta("Error", "Estado de serie no válido.");
+                return;
+            }
+            serieActual.setEstado(estado);
+        } else {
+            serieActual.setEstado(null);
+        }
+        
+        // Rating - desde el slider
+        double rating = sliderRating.getValue();
+        serieActual.setRating(rating > 0 ? rating : null);
+
+        // Refrescar la tabla
+        int selectedIndex = tableSeries.getSelectionModel().getSelectedIndex();
+        tableSeries.getItems().set(selectedIndex, serieActual);
+        
+        lblEstado.setText("Serie actualizada: " + serieActual.getTitulo());
+        mostrarAlerta("Éxito", "La serie se ha actualizado correctamente.");
     }
+}
 
     /**
      * Acción del botón eliminar

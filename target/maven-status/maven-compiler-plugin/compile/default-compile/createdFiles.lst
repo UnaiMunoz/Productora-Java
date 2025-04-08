@@ -14,7 +14,10 @@ com\productora\controller\SerieController.class
 com\productora\controller\TemporadaController.class
 com\productora\dao\SerieDAO.class
 com\productora\model\Temporada.class
+com\productora\controller\ActorController$1.class
 com\productora\model\Episodio.class
+com\productora\controller\TemporadaController$1.class
 com\productora\controller\MainController.class
 com\productora\AppData.class
 com\productora\Main.class
+com\productora\controller\ActorController$2.class

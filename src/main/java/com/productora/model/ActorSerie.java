@@ -33,100 +33,7 @@ public class ActorSerie {
      * @param rol Rol del actor (protagonista, secundario, etc.)
      * @param temporadasParticipacion Temporadas en las que participa (formato: "1,2,3")
      */
-    public int getSerieId() {
-        loadFromDatabase();
-        return serieId;
-    }
-
-    public void setSerieId(int serieId) {
-        this.serieId = serieId;
-        updateDatabase();
-    }
-
-    public String getPersonaje() {
-        loadFromDatabase();
-        return personaje;
-    }
-
-    public void setPersonaje(String personaje) {
-        this.personaje = personaje;
-        updateDatabase();
-    }
-
-    public String getRol() {
-        loadFromDatabase();
-        return rol;
-    }
-
-    public void setRol(String rol) {
-        this.rol = rol;
-        updateDatabase();
-    }
-
-    public String getTemporadasParticipacion() {
-        loadFromDatabase();
-        return temporadasParticipacion;
-    }
-
-    public void setTemporadasParticipacion(String temporadasParticipacion) {
-        this.temporadasParticipacion = temporadasParticipacion;
-        updateDatabase();
-    }
-
-    public LocalDateTime getFechaCreacion() {
-        loadFromDatabase();
-        return fechaCreacion;
-    }
-
-    public LocalDateTime getFechaModificacion() {
-        loadFromDatabase();
-        return fechaModificacion;
-    }
-
-    /**
-     * Obtiene todas las participaciones de un actor
-     * 
-     * @param actorId ID del actor
-     * @return ArrayList con todas las participaciones
-     */
-    public static ArrayList<ActorSerie> obtenerPorActor(int actorId) {
-        AppData appData = AppData.getInstance();
-        String sql = "SELECT id FROM ActoresSeries WHERE actor_id = " + actorId + " ORDER BY personaje";
-        ArrayList<HashMap<String, Object>> resultado = appData.query(sql);
-        ArrayList<ActorSerie> participaciones = new ArrayList<>();
-
-        for (HashMap<String, Object> row : resultado) {
-            int id = ((Number) row.get("id")).intValue();
-            participaciones.add(new ActorSerie(id));
-        }
-
-        return participaciones;
-    }
-
-    /**
-     * Obtiene todas las participaciones en una serie
-     * 
-     * @param serieId ID de la serie
-     * @return ArrayList con todas las participaciones
-     */
-    public static ArrayList<ActorSerie> obtenerPorSerie(int serieId) {
-        AppData appData = AppData.getInstance();
-        String sql = "SELECT id FROM ActoresSeries WHERE serie_id = " + serieId + " ORDER BY personaje";
-        ArrayList<HashMap<String, Object>> resultado = appData.query(sql);
-        ArrayList<ActorSerie> participaciones = new ArrayList<>();
-
-        for (HashMap<String, Object> row : resultado) {
-            int id = ((Number) row.get("id")).intValue();
-            participaciones.add(new ActorSerie(id));
-        }
-
-        return participaciones;
-    }
-
-    @Override
-    public String toString() {
-        return getActor().toString() + " como " + this.personaje + " en " + getSerie().getTitulo();
-    } ActorSerie(int actorId, int serieId, String personaje, String rol, String temporadasParticipacion) {
+    public ActorSerie(int actorId, int serieId, String personaje, String rol, String temporadasParticipacion) {
         this.actorId = actorId;
         this.serieId = serieId;
         this.personaje = personaje;
@@ -262,4 +169,98 @@ public class ActorSerie {
         updateDatabase();
     }
 
-    public
+    public int getSerieId() {
+        loadFromDatabase();
+        return serieId;
+    }
+
+    public void setSerieId(int serieId) {
+        this.serieId = serieId;
+        updateDatabase();
+    }
+
+    public String getPersonaje() {
+        loadFromDatabase();
+        return personaje;
+    }
+
+    public void setPersonaje(String personaje) {
+        this.personaje = personaje;
+        updateDatabase();
+    }
+
+    public String getRol() {
+        loadFromDatabase();
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+        updateDatabase();
+    }
+
+    public String getTemporadasParticipacion() {
+        loadFromDatabase();
+        return temporadasParticipacion;
+    }
+
+    public void setTemporadasParticipacion(String temporadasParticipacion) {
+        this.temporadasParticipacion = temporadasParticipacion;
+        updateDatabase();
+    }
+
+    public LocalDateTime getFechaCreacion() {
+        loadFromDatabase();
+        return fechaCreacion;
+    }
+
+    public LocalDateTime getFechaModificacion() {
+        loadFromDatabase();
+        return fechaModificacion;
+    }
+
+    /**
+     * Obtiene todas las participaciones de un actor
+     * 
+     * @param actorId ID del actor
+     * @return ArrayList con todas las participaciones
+     */
+    public static ArrayList<ActorSerie> obtenerPorActor(int actorId) {
+        AppData appData = AppData.getInstance();
+        String sql = "SELECT id FROM ActoresSeries WHERE actor_id = " + actorId + " ORDER BY personaje";
+        ArrayList<HashMap<String, Object>> resultado = appData.query(sql);
+        ArrayList<ActorSerie> participaciones = new ArrayList<>();
+
+        for (HashMap<String, Object> row : resultado) {
+            int id = ((Number) row.get("id")).intValue();
+            participaciones.add(new ActorSerie(id));
+        }
+
+        return participaciones;
+    }
+
+    /**
+     * Obtiene todas las participaciones en una serie
+     * 
+     * @param serieId ID de la serie
+     * @return ArrayList con todas las participaciones
+     */
+    public static ArrayList<ActorSerie> obtenerPorSerie(int serieId) {
+        AppData appData = AppData.getInstance();
+        String sql = "SELECT id FROM ActoresSeries WHERE serie_id = " + serieId + " ORDER BY personaje";
+        ArrayList<HashMap<String, Object>> resultado = appData.query(sql);
+        ArrayList<ActorSerie> participaciones = new ArrayList<>();
+
+        for (HashMap<String, Object> row : resultado) {
+            int id = ((Number) row.get("id")).intValue();
+            participaciones.add(new ActorSerie(id));
+        }
+
+        return participaciones;
+    }
+
+    @Override
+    public String toString() {
+        return getActor().toString() + " como " + this.personaje + " en " + getSerie().getTitulo();
+    }
+}

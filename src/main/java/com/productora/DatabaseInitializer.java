@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -73,10 +71,6 @@ public class DatabaseInitializer {
             return dbPath;
             
         } catch (Exception e) {
-            System.err.println("Error al insertar datos de ejemplo: " + e.getMessage());
-            e.printStackTrace();
-            // No lanzamos la excepción para que la aplicación siga funcionando
-        } {
             System.err.println("Error al inicializar la base de datos: " + e.getMessage());
             e.printStackTrace();
             return dbPath;
@@ -265,4 +259,9 @@ public class DatabaseInitializer {
             
             System.out.println("Datos de ejemplo insertados correctamente.");
             
-        } catch (Exception e)
+        } catch (Exception e) {
+            System.err.println("Error al insertar datos de ejemplo: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}
