@@ -17,8 +17,6 @@
                 <Label text="Gestión de Actores" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
                 <Pane HBox.hgrow="ALWAYS" />
                 <Button text="Nuevo Actor" onAction="#onNuevoActorAction"/>
-                <TextField fx:id="txtBuscar" promptText="Buscar actor..." prefWidth="200"/>
-                <Button text="Buscar" onAction="#onBuscarAction"/>
             </HBox>
             <Separator/>
         </VBox>

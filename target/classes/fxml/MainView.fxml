@@ -17,7 +17,6 @@
             <HBox alignment="CENTER_LEFT" spacing="10">
                 <Label text="Gestión de Series" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
                 <Pane HBox.hgrow="ALWAYS" />
-                <Button text="Ayuda" onAction="#onAyudaAction"/>
             </HBox>
             <Separator/>
         </VBox>
@@ -34,7 +33,6 @@
             <Button text="Temporadas" prefWidth="160" onAction="#onTemporadasAction"/>
             <Button text="Episodios" prefWidth="160" onAction="#onEpisodiosAction"/>
             <Button text="Actores" prefWidth="160" onAction="#onActoresAction"/>
-            <Button text="Reportes" prefWidth="160" onAction="#onReportesAction"/>
         </VBox>
     </left>
     

@@ -76,25 +76,6 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Maneja la acción del botón Ayuda
-     */
-    @FXML
-    private void onAyudaAction(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Ayuda");
-        alert.setHeaderText("Sistema de Gestión de Productora");
-        alert.setContentText("Esta aplicación permite gestionar series de televisión, temporadas, " +
-                "episodios y actores para una productora.\n\n" +
-                "Módulos disponibles:\n" +
-                "• Series: Administra información de series\n" +
-                "• Temporadas: Gestiona temporadas de cada serie\n" +
-                "• Episodios: Administra episodios de cada temporada\n" +
-                "• Actores: Gestiona actores y sus participaciones en series\n" +
-                "• Reportes: Genera informes y estadísticas (próximamente)");
-        alert.showAndWait();
-    }
-
-    /**
      * Carga una vista en el contentPane
      */
     private void cargarVista(String fxmlPath, String title) {

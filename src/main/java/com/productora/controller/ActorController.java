@@ -221,22 +221,6 @@ public class ActorController implements Initializable {
     }
 
     /**
-     * Acción del botón buscar
-     */
-    @FXML
-    private void onBuscarAction(ActionEvent event) {
-        String textoBusqueda = txtBuscar.getText().trim();
-        if (!textoBusqueda.isEmpty()) {
-            actoresList.clear();
-            actoresList.addAll(actorDAO.findByName(textoBusqueda));
-            tableActores.setItems(actoresList);
-            lblEstado.setText("Resultados de búsqueda: " + actoresList.size());
-        } else {
-            cargarActores();
-        }
-    }
-
-    /**
      * Acción del botón nuevo actor
      */
     @FXML
