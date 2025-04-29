@@ -6,10 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- * Clase principal que inicia la aplicación JavaFX
- * para la gestión de productora de series.
- */
 public class Main extends Application {
 
     @Override
@@ -26,7 +22,6 @@ public class Main extends Application {
 
         // Configurar la escena - Tamaño más compacto
         Scene scene = new Scene(root, 800, 600);
-        // scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 
         // Configurar y mostrar la ventana
         primaryStage.setTitle("Gestión de Series");

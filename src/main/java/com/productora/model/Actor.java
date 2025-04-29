@@ -230,48 +230,6 @@ public class Actor {
         return actores;
     }
 
-    /**
-     * Busca actores por nombre o apellido
-     * 
-     * @param texto Texto a buscar
-     * @return ArrayList con los actores que coinciden
-     */
-    public static ArrayList<Actor> buscarPorNombre(String texto) {
-        AppData appData = AppData.getInstance();
-        String sql = "SELECT id FROM Actores WHERE nombre LIKE '%" + texto + "%' OR apellido LIKE '%" + texto + "%' " +
-                     "ORDER BY nombre, apellido";
-        ArrayList<HashMap<String, Object>> resultado = appData.query(sql);
-        ArrayList<Actor> actores = new ArrayList<>();
-
-        for (HashMap<String, Object> row : resultado) {
-            int id = ((Number) row.get("id")).intValue();
-            actores.add(new Actor(id));
-        }
-
-        return actores;
-    }
-
-    /**
-     * Busca actores por nacionalidad
-     * 
-     * @param nacionalidad Nacionalidad a buscar
-     * @return ArrayList con los actores que coinciden
-     */
-    public static ArrayList<Actor> buscarPorNacionalidad(String nacionalidad) {
-        AppData appData = AppData.getInstance();
-        String sql = "SELECT id FROM Actores WHERE nacionalidad LIKE '%" + nacionalidad + "%' " +
-                     "ORDER BY nombre, apellido";
-        ArrayList<HashMap<String, Object>> resultado = appData.query(sql);
-        ArrayList<Actor> actores = new ArrayList<>();
-
-        for (HashMap<String, Object> row : resultado) {
-            int id = ((Number) row.get("id")).intValue();
-            actores.add(new Actor(id));
-        }
-
-        return actores;
-    }
-
     @Override
     public String toString() {
         return this.nombre + " " + this.apellido;

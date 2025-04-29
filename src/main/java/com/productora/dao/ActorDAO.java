@@ -27,16 +27,6 @@ public class ActorDAO {
     }
 
     /**
-     * Busca actores por nombre o apellido
-     * 
-     * @param nombre Texto a buscar en nombre o apellido
-     * @return Lista de actores que coinciden
-     */
-    public List<Actor> findByName(String nombre) {
-        return Actor.buscarPorNombre(nombre);
-    }
-
-    /**
      * Crea un nuevo actor
      * 
      * @param nombre Nombre del actor
@@ -77,15 +67,6 @@ public class ActorDAO {
         return false;
     }
 
-    /**
-     * Busca actores por nacionalidad
-     * 
-     * @param nacionalidad Nacionalidad a buscar
-     * @return Lista de actores de la nacionalidad especificada
-     */
-    public List<Actor> findByNationality(String nacionalidad) {
-        return Actor.buscarPorNacionalidad(nacionalidad);
-    }
 
     /**
      * Busca actores que participan en una serie

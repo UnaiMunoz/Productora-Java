@@ -13,9 +13,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-/**
- * Controlador para la vista principal de la aplicación
- */
+
 public class MainController implements Initializable {
 
     @FXML
@@ -35,44 +33,24 @@ public class MainController implements Initializable {
         }
     }
 
-    /**
-     * Maneja la acción del botón Series
-     */
     @FXML
     private void onSeriesAction(ActionEvent event) {
         cargarVista("/fxml/SerieView.fxml", "Vista de Series");
     }
 
-    /**
-     * Maneja la acción del botón Temporadas
-     */
     @FXML
     private void onTemporadasAction(ActionEvent event) {
         cargarVista("/fxml/TemporadaView.fxml", "Vista de Temporadas");
     }
 
-    /**
-     * Maneja la acción del botón Episodios
-     */
     @FXML
     private void onEpisodiosAction(ActionEvent event) {
         cargarVista("/fxml/EpisodioView.fxml", "Vista de Episodios");
     }
 
-    /**
-     * Maneja la acción del botón Actores
-     */
     @FXML
     private void onActoresAction(ActionEvent event) {
         cargarVista("/fxml/ActorView.fxml", "Vista de Actores");
-    }
-
-    /**
-     * Maneja la acción del botón Reportes
-     */
-    @FXML
-    private void onReportesAction(ActionEvent event) {
-        mostrarMensajeNoImplementado("Vista de Reportes");
     }
 
     /**
@@ -89,14 +67,4 @@ public class MainController implements Initializable {
         }
     }
 
-    /**
-     * Muestra un mensaje para funcionalidades no implementadas
-     */
-    private void mostrarMensajeNoImplementado(String modulo) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Módulo no implementado");
-        alert.setHeaderText(modulo);
-        alert.setContentText("Esta funcionalidad aún no ha sido implementada.");
-        alert.showAndWait();
-    }
 }
