@@ -29,9 +29,6 @@ public class Actor {
 
     /**
      * Constructor para crear un nuevo actor
-     * 
-     * @param nombre Nombre del actor
-     * @param apellido Apellido del actor
      */
     public Actor(String nombre, String apellido) {
         this.nombre = nombre;
@@ -48,8 +45,6 @@ public class Actor {
 
     /**
      * Constructor para cargar un actor existente
-     * 
-     * @param id Identificador del actor
      */
     public Actor(int id) {
         this.id = id;
@@ -121,8 +116,6 @@ public class Actor {
 
     /**
      * Elimina el actor de la base de datos
-     * 
-     * @return true si se eliminó correctamente
      */
     public boolean delete() {
         try {
@@ -213,8 +206,6 @@ public class Actor {
 
     /**
      * Obtiene todos los actores de la base de datos
-     * 
-     * @return ArrayList con todos los actores
      */
     public static ArrayList<Actor> obtenerTodos() {
         AppData appData = AppData.getInstance();

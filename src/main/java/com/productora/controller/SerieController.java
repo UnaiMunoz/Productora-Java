@@ -136,8 +136,6 @@ public class SerieController implements Initializable {
 
     /**
      * Muestra los detalles de una serie en el formulario
-     * 
-     * @param serie Serie a mostrar
      */
     private void mostrarDetalleSerie(Serie serie) {
         txtTitulo.setText(serie.getTitulo());
@@ -175,9 +173,6 @@ public class SerieController implements Initializable {
         });
     }
 
-   // En la clase SerieController.java
-// Reemplazar el método onGuardarAction con esta versión mejorada:
-
 /**
  * Acción del botón guardar cambios
  */
@@ -206,8 +201,8 @@ private void onGuardarAction(ActionEvent event) {
         if (!anyoInicioStr.isEmpty()) {
             try {
                 int anyoInicio = Integer.parseInt(anyoInicioStr);
-                if (anyoInicio < 1900 || anyoInicio > 2100) {
-                    mostrarAlerta("Error", "El año de inicio debe estar entre 1900 y 2100.");
+                if (anyoInicio < 1900 || anyoInicio > 2025) {
+                    mostrarAlerta("Error", "El año de inicio debe estar entre 1900 y 2025.");
                     txtAnyoInicio.requestFocus();
                     return;
                 }
@@ -226,8 +221,8 @@ private void onGuardarAction(ActionEvent event) {
         if (!anyoFinStr.isEmpty()) {
             try {
                 int anyoFin = Integer.parseInt(anyoFinStr);
-                if (anyoFin < 1900 || anyoFin > 2100) {
-                    mostrarAlerta("Error", "El año de fin debe estar entre 1900 y 2100.");
+                if (anyoFin < 1900 || anyoFin > 2025) {
+                    mostrarAlerta("Error", "El año de fin debe estar entre 1900 y 2025.");
                     txtAnyoFin.requestFocus();
                     return;
                 }

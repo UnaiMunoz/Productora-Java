@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
@@ -24,7 +23,6 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Cargar imagen de logo (opcional)
         try {
             //Image logo = new Image(getClass().getResourceAsStream("/images/logo.png"));
             //logoImageView.setImage(logo);

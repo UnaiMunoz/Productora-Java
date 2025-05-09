@@ -19,9 +19,6 @@ public class ActorSerieDAO {
 
     /**
      * Obtiene todas las participaciones de un actor
-     * 
-     * @param actorId ID del actor
-     * @return Lista de participaciones del actor
      */
     public List<ActorSerie> getAllByActor(int actorId) {
         return ActorSerie.obtenerPorActor(actorId);
@@ -29,9 +26,6 @@ public class ActorSerieDAO {
 
     /**
      * Obtiene todas las participaciones en una serie
-     * 
-     * @param serieId ID de la serie
-     * @return Lista de participaciones en la serie
      */
     public List<ActorSerie> getAllBySerie(int serieId) {
         return ActorSerie.obtenerPorSerie(serieId);
@@ -39,13 +33,6 @@ public class ActorSerieDAO {
 
     /**
      * Crea una nueva participación
-     * 
-     * @param actorId ID del actor
-     * @param serieId ID de la serie
-     * @param personaje Nombre del personaje
-     * @param rol Rol del actor (protagonista, secundario, etc.)
-     * @param temporadas Temporadas en las que participa (formato: "1,2,3")
-     * @return Nueva instancia de ActorSerie
      */
     public ActorSerie create(int actorId, int serieId, String personaje, String rol, String temporadas) {
         return new ActorSerie(actorId, serieId, personaje, rol, temporadas);
@@ -53,9 +40,6 @@ public class ActorSerieDAO {
 
     /**
      * Obtiene una participación por su ID
-     * 
-     * @param id ID de la participación
-     * @return Objeto ActorSerie o null si no existe
      */
     public ActorSerie getById(int id) {
         String sql = "SELECT id FROM ActoresSeries WHERE id = " + id;
@@ -69,9 +53,6 @@ public class ActorSerieDAO {
 
     /**
      * Elimina una participación por su ID
-     * 
-     * @param id ID de la participación a eliminar
-     * @return true si se eliminó correctamente
      */
     public boolean delete(int id) {
         ActorSerie actorSerie = getById(id);
@@ -83,9 +64,6 @@ public class ActorSerieDAO {
 
     /**
      * Busca participaciones por personaje
-     * 
-     * @param personaje Nombre del personaje a buscar
-     * @return Lista de participaciones que coinciden
      */
     public List<ActorSerie> findByCharacter(String personaje) {
         AppData appData = AppData.getInstance();
@@ -103,9 +81,6 @@ public class ActorSerieDAO {
 
     /**
      * Busca participaciones por rol
-     * 
-     * @param rol Rol a buscar (protagonista, secundario, etc.)
-     * @return Lista de participaciones que coinciden
      */
     public List<ActorSerie> findByRole(String rol) {
         AppData appData = AppData.getInstance();

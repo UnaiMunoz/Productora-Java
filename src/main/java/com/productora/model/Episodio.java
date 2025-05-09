@@ -32,10 +32,6 @@ public class Episodio {
 
     /**
      * Constructor para crear un nuevo episodio
-     * 
-     * @param temporadaId ID de la temporada a la que pertenece
-     * @param numero Número del episodio en la temporada
-     * @param titulo Título del episodio
      */
     public Episodio(int temporadaId, int numero, String titulo) {
         this.temporadaId = temporadaId;
@@ -54,8 +50,7 @@ public class Episodio {
 
     /**
      * Constructor para cargar un episodio existente
-     * 
-     * @param id Identificador del episodio
+
      */
     public Episodio(int id) {
         this.id = id;
@@ -129,8 +124,7 @@ public class Episodio {
 
     /**
      * Elimina el episodio de la base de datos
-     * 
-     * @return true si se eliminó correctamente
+
      */
     public boolean delete() {
         try {
@@ -145,8 +139,6 @@ public class Episodio {
 
     /**
      * Obtiene una representación de la temporada a la que pertenece el episodio
-     * 
-     * @return Objeto Temporada
      */
     public Temporada getTemporada() {
         return new Temporada(this.temporadaId);
@@ -154,8 +146,6 @@ public class Episodio {
 
     /**
      * Obtiene una representación de la serie a la que pertenece el episodio
-     * 
-     * @return Objeto Serie
      */
     public Serie getSerie() {
         // Primero obtenemos la temporada
@@ -277,9 +267,6 @@ public class Episodio {
 
     /**
      * Obtiene todos los episodios de una temporada
-     * 
-     * @param temporadaId ID de la temporada
-     * @return ArrayList con todos los episodios de la temporada
      */
     public static ArrayList<Episodio> obtenerPorTemporada(int temporadaId) {
         AppData appData = AppData.getInstance();
@@ -297,9 +284,6 @@ public class Episodio {
 
     /**
      * Obtiene todos los episodios de una serie
-     * 
-     * @param serieId ID de la serie
-     * @return ArrayList con todos los episodios de la serie
      */
     public static ArrayList<Episodio> obtenerPorSerie(int serieId) {
         AppData appData = AppData.getInstance();

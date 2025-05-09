@@ -23,7 +23,6 @@ import javafx.geometry.Insets;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -197,8 +196,6 @@ public class ActorController implements Initializable {
 
     /**
      * Carga las participaciones de un actor en series
-     * 
-     * @param actorId ID del actor
      */
     private void cargarParticipaciones(int actorId) {
         participacionesList.clear();
@@ -208,8 +205,6 @@ public class ActorController implements Initializable {
 
     /**
      * Muestra los detalles de un actor en el formulario
-     * 
-     * @param actor Actor a mostrar
      */
     private void mostrarDetalleActor(Actor actor) {
         txtNombre.setText(actor.getNombre());

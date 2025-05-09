@@ -36,8 +36,6 @@ public class Serie {
 
     /**
      * Constructor para crear una nueva serie
-     * 
-     * @param titulo Título de la serie
      */
     public Serie(String titulo) {
         this.titulo = titulo;
@@ -53,8 +51,6 @@ public class Serie {
 
     /**
      * Constructor para cargar una serie existente
-     * 
-     * @param id Identificador de la serie
      */
     public Serie(int id) {
         this.id = id;
@@ -125,8 +121,7 @@ public class Serie {
 
     /**
      * Elimina la serie de la base de datos
-     * 
-     * @return true si se eliminó correctamente
+
      */
     public boolean delete() {
         try {
@@ -248,8 +243,6 @@ public class Serie {
 
     /**
      * Obtiene todas las series de la base de datos
-     * 
-     * @return ArrayList con todas las series
      */
     public static ArrayList<Serie> obtenerTodas() {
         AppData appData = AppData.getInstance();
@@ -267,9 +260,6 @@ public class Serie {
 
     /**
      * Busca series por título
-     * 
-     * @param titulo Texto a buscar en el título
-     * @return ArrayList con las series que coinciden
      */
     public static ArrayList<Serie> buscarPorTitulo(String titulo) {
         AppData appData = AppData.getInstance();

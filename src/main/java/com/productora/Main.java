@@ -37,8 +37,6 @@ public class Main extends Application {
 
     /**
      * Método principal que inicia la aplicación
-     * 
-     * @param args argumentos de línea de comandos
      */
     public static void main(String[] args) {
         launch(args);

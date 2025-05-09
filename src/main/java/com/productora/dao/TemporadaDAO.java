@@ -19,9 +19,6 @@ public class TemporadaDAO {
 
     /**
      * Obtiene todas las temporadas de una serie
-     * 
-     * @param serieId ID de la serie
-     * @return Lista de temporadas de la serie
      */
     public List<Temporada> getAllBySerie(int serieId) {
         return Temporada.obtenerPorSerie(serieId);
@@ -29,11 +26,6 @@ public class TemporadaDAO {
 
     /**
      * Crea una nueva temporada
-     * 
-     * @param serieId ID de la serie a la que pertenece
-     * @param numero Número de la temporada
-     * @param titulo Título de la temporada (opcional)
-     * @return Nueva instancia de Temporada
      */
     public Temporada create(int serieId, int numero, String titulo) {
         return new Temporada(serieId, numero, titulo);
@@ -41,10 +33,6 @@ public class TemporadaDAO {
 
     /**
      * Crea una nueva temporada sin título específico
-     * 
-     * @param serieId ID de la serie a la que pertenece
-     * @param numero Número de la temporada
-     * @return Nueva instancia de Temporada
      */
     public Temporada create(int serieId, int numero) {
         return new Temporada(serieId, numero);
@@ -52,9 +40,6 @@ public class TemporadaDAO {
 
     /**
      * Obtiene una temporada por su ID
-     * 
-     * @param id ID de la temporada
-     * @return Temporada correspondiente o null si no existe
      */
     public Temporada getById(int id) {
         String sql = "SELECT id FROM Temporadas WHERE id = " + id;
@@ -68,9 +53,6 @@ public class TemporadaDAO {
 
     /**
      * Elimina una temporada por su ID
-     * 
-     * @param id ID de la temporada a eliminar
-     * @return true si se eliminó correctamente
      */
     public boolean delete(int id) {
         Temporada temporada = getById(id);
@@ -82,9 +64,6 @@ public class TemporadaDAO {
 
     /**
      * Obtiene el siguiente número disponible para una temporada en una serie
-     * 
-     * @param serieId ID de la serie
-     * @return Siguiente número de temporada
      */
     public int getNextSeasonNumber(int serieId) {
         String sql = "SELECT MAX(numero) as max_num FROM Temporadas WHERE serie_id = " + serieId;

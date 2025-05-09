@@ -18,7 +18,6 @@ public class DatabaseInitializer {
 
     /**
      * Inicializa la base de datos y devuelve la ruta al archivo
-     * @return Ruta al archivo de base de datos
      */
     public static String initializeDatabase() {
         String dbPath = "./data/productora.sqlite";
@@ -109,9 +108,6 @@ public class DatabaseInitializer {
     
     /**
      * Comprueba si una tabla existe en la base de datos
-     * @param dbPath Ruta a la base de datos
-     * @param tableName Nombre de la tabla a verificar
-     * @return true si la tabla existe, false en caso contrario
      */
     private static boolean tableExists(String dbPath, String tableName) {
         String url = "jdbc:sqlite:" + dbPath;
@@ -129,10 +125,6 @@ public class DatabaseInitializer {
     
     /**
      * Lee un archivo SQL y devuelve su contenido como String
-     * 
-     * @param filePath Ruta al archivo SQL
-     * @return Contenido del archivo como String
-     * @throws IOException Si hay error al leer el archivo
      */
     private static String readSqlScript(String filePath) throws IOException {
         StringBuilder sqlScript = new StringBuilder();
@@ -152,9 +144,6 @@ public class DatabaseInitializer {
     
     /**
      * Comprueba si la base de datos está vacía (no tiene datos en las tablas principales)
-     * 
-     * @param dbPath Ruta a la base de datos
-     * @return true si la base de datos está vacía, false en caso contrario
      */
     private static boolean isDatabaseEmpty(String dbPath) {
         String url = "jdbc:sqlite:" + dbPath;
@@ -176,8 +165,6 @@ public class DatabaseInitializer {
     
     /**
      * Inserta datos de ejemplo en la base de datos
-     * 
-     * @param dbPath Ruta a la base de datos
      */
     private static void insertSampleData(String dbPath) {
         String url = "jdbc:sqlite:" + dbPath;

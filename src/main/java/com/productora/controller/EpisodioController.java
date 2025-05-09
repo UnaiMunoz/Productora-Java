@@ -206,9 +206,7 @@ public class EpisodioController implements Initializable {
 
     /**
      * Carga las temporadas de una serie en el ComboBox
-     * 
-     * @param serieId ID de la serie seleccionada
-     */
+    */
     private void cargarTemporadas(int serieId) {
         List<Temporada> temporadas = temporadaDAO.getAllBySerie(serieId);
         cmbTemporadas.setItems(FXCollections.observableArrayList(temporadas));
@@ -229,8 +227,6 @@ public class EpisodioController implements Initializable {
 
     /**
      * Carga los episodios de una temporada en la tabla
-     * 
-     * @param temporadaId ID de la temporada seleccionada
      */
     private void cargarEpisodios(int temporadaId) {
         episodiosList.clear();
@@ -251,8 +247,6 @@ public class EpisodioController implements Initializable {
 
     /**
      * Muestra los detalles de un episodio en el formulario
-     * 
-     * @param episodio Episodio a mostrar
      */
     private void mostrarDetalleEpisodio(Episodio episodio) {
         txtTitulo.setText(episodio.getTitulo());

@@ -172,8 +172,6 @@ public class TemporadaController implements Initializable {
 
     /**
      * Carga las temporadas de una serie en la tabla
-     * 
-     * @param serieId ID de la serie seleccionada
      */
     private void cargarTemporadas(int serieId) {
         temporadasList.clear();
@@ -205,8 +203,6 @@ public class TemporadaController implements Initializable {
 
     /**
      * Muestra los detalles de una temporada en el formulario
-     * 
-     * @param temporada Temporada a mostrar
      */
     private void mostrarDetalleTemporada(Temporada temporada) {
         txtTitulo.setText(temporada.getTitulo());

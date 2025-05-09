@@ -24,8 +24,6 @@ public class AppData {
 
     /**
      * Obté la instància única de AppData (Singleton).
-     *
-     * @return la instància d'AppData.
      */
     public static AppData getInstance() {
         if (instance == null) {
@@ -66,8 +64,6 @@ public class AppData {
 
     /**
      * Inicia una transacción
-     * 
-     * @return true si se ha iniciado correctamente, false en caso de error
      */
     public boolean beginTransaction() {
         if (conn == null) {
@@ -93,8 +89,6 @@ public class AppData {
     
     /**
      * Confirma una transacción
-     * 
-     * @return true si se ha confirmado correctamente, false en caso de error
      */
     public boolean commitTransaction() {
         if (conn == null || !transactionActive) {
@@ -115,8 +109,6 @@ public class AppData {
     
     /**
      * Cancela una transacción
-     * 
-     * @return true si se ha cancelado correctamente, false en caso de error
      */
     public boolean rollbackTransaction() {
         if (conn == null) {
@@ -138,9 +130,6 @@ public class AppData {
     /**
      * Executa una actualització a la base de dades (INSERT, UPDATE, DELETE, etc.).
      * Se realiza un commit automático, a menos que haya una transacción activa.
-     *
-     * @param sql la sentència SQL d'actualització a executar.
-     * @return true si la operación fue exitosa, false en caso contrario
      */
     public boolean update(String sql) {
         if (conn == null) {
@@ -176,9 +165,6 @@ public class AppData {
     /**
      * Executa una inserció a la base de dades i retorna l'identificador generat.
      * Se realiza el commit automáticamente, a menos que haya una transacción activa.
-     *
-     * @param sql la sentència SQL d'inserció a executar.
-     * @return l'identificador generat per la fila inserida, o -1 en cas d'error.
      */
     public int insertAndGetId(String sql) {
         if (conn == null) {
@@ -220,9 +206,6 @@ public class AppData {
     /**
      * Realitza una consulta a la base de dades i transforma el ResultSet en una ArrayList de HashMap.
      * Cada HashMap representa una fila amb claus que corresponen als noms de columna.
-     *
-     * @param sql la sentència SQL de consulta.
-     * @return una ArrayList de HashMap amb els resultats de la consulta.
      */
     public ArrayList<HashMap<String, Object>> query(String sql) {
         ArrayList<HashMap<String, Object>> resultList = new ArrayList<>();
@@ -253,9 +236,6 @@ public class AppData {
     
     /**
      * Ejecuta una consulta SQL y devuelve un único valor
-     * 
-     * @param sql Consulta SQL que debe devolver un único valor
-     * @return El valor devuelto o null si hay error o no hay resultado
      */
     public Object queryScalar(String sql) {
         if (conn == null) {
@@ -277,8 +257,6 @@ public class AppData {
     
     /**
      * Comprueba si la conexión está activa
-     * 
-     * @return true si la conexión está activa
      */
     public boolean isConnected() {
         if (conn == null) {

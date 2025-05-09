@@ -29,10 +29,6 @@ public class Temporada {
 
     /**
      * Constructor para crear una nueva temporada
-     * 
-     * @param serieId ID de la serie a la que pertenece
-     * @param numero Número de la temporada
-     * @param titulo Título de la temporada (opcional)
      */
     public Temporada(int serieId, int numero, String titulo) {
         this.serieId = serieId;
@@ -58,8 +54,6 @@ public class Temporada {
 
     /**
      * Constructor para cargar una temporada existente
-     * 
-     * @param id Identificador de la temporada
      */
     public Temporada(int id) {
         this.id = id;
@@ -134,8 +128,6 @@ public class Temporada {
 
     /**
      * Elimina la temporada de la base de datos
-     * 
-     * @return true si se eliminó correctamente
      */
     public boolean delete() {
         try {
@@ -150,8 +142,6 @@ public class Temporada {
 
     /**
      * Obtiene una representación de la serie a la que pertenece la temporada
-     * 
-     * @return Objeto Serie
      */
     public Serie getSerie() {
         return new Serie(this.serieId);
@@ -248,9 +238,6 @@ public class Temporada {
 
     /**
      * Obtiene todas las temporadas de una serie
-     * 
-     * @param serieId ID de la serie
-     * @return ArrayList con todas las temporadas de la serie
      */
     public static ArrayList<Temporada> obtenerPorSerie(int serieId) {
         AppData appData = AppData.getInstance();

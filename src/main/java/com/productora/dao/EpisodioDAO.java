@@ -20,9 +20,6 @@ public class EpisodioDAO {
 
     /**
      * Obtiene todos los episodios de una temporada
-     * 
-     * @param temporadaId ID de la temporada
-     * @return Lista de episodios de la temporada
      */
     public List<Episodio> getAllByTemporada(int temporadaId) {
         return Episodio.obtenerPorTemporada(temporadaId);
@@ -30,9 +27,6 @@ public class EpisodioDAO {
 
     /**
      * Obtiene todos los episodios de una serie
-     * 
-     * @param serieId ID de la serie
-     * @return Lista de episodios de la serie
      */
     public List<Episodio> getAllBySerie(int serieId) {
         return Episodio.obtenerPorSerie(serieId);
@@ -40,9 +34,6 @@ public class EpisodioDAO {
 
     /**
      * Busca episodios por título
-     * 
-     * @param titulo Texto a buscar en el título
-     * @return Lista de episodios que coinciden
      */
     public List<Episodio> findByTitle(String titulo) {
         return Episodio.buscarPorTitulo(titulo);
@@ -50,11 +41,6 @@ public class EpisodioDAO {
 
     /**
      * Crea un nuevo episodio
-     * 
-     * @param temporadaId ID de la temporada a la que pertenece
-     * @param numero Número del episodio en la temporada
-     * @param titulo Título del episodio
-     * @return Nueva instancia de Episodio
      */
     public Episodio create(int temporadaId, int numero, String titulo) {
         Episodio episodio = new Episodio(temporadaId, numero, titulo);
@@ -68,9 +54,6 @@ public class EpisodioDAO {
 
     /**
      * Obtiene un episodio por su ID
-     * 
-     * @param id ID del episodio
-     * @return Episodio correspondiente o null si no existe
      */
     public Episodio getById(int id) {
         String sql = "SELECT id FROM Episodios WHERE id = " + id;
@@ -84,9 +67,6 @@ public class EpisodioDAO {
 
     /**
      * Elimina un episodio por su ID
-     * 
-     * @param id ID del episodio a eliminar
-     * @return true si se eliminó correctamente
      */
     public boolean delete(int id) {
         Episodio episodio = getById(id);
@@ -105,31 +85,9 @@ public class EpisodioDAO {
         return false;
     }
 
-    /**
-     * Busca episodios por director
-     * 
-     * @param director Nombre del director a buscar
-     * @return Lista de episodios del director especificado
-     */
-    public List<Episodio> findByDirector(String director) {
-        AppData appData = AppData.getInstance();
-        String sql = "SELECT id FROM Episodios WHERE director LIKE '%" + director + "%' ORDER BY titulo";
-        ArrayList<HashMap<String, Object>> resultado = appData.query(sql);
-        ArrayList<Episodio> episodios = new ArrayList<>();
-
-        for (HashMap<String, Object> row : resultado) {
-            int id = ((Number) row.get("id")).intValue();
-            episodios.add(new Episodio(id));
-        }
-
-        return episodios;
-    }
 
     /**
      * Obtiene los episodios mejor valorados
-     * 
-     * @param limit Número máximo de episodios a retornar
-     * @return Lista de episodios ordenados por rating descendente
      */
     public List<Episodio> getTopRated(int limit) {
         AppData appData = AppData.getInstance();
@@ -147,9 +105,6 @@ public class EpisodioDAO {
 
     /**
      * Obtiene el siguiente número disponible para un episodio en una temporada
-     * 
-     * @param temporadaId ID de la temporada
-     * @return Siguiente número de episodio
      */
     public int getNextEpisodeNumber(int temporadaId) {
         String sql = "SELECT MAX(numero) as max_num FROM Episodios WHERE temporada_id = " + temporadaId;

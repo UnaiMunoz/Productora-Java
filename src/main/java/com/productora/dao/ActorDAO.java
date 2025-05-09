@@ -19,8 +19,6 @@ public class ActorDAO {
 
     /**
      * Obtiene todos los actores de la base de datos
-     * 
-     * @return Lista de todos los actores
      */
     public List<Actor> getAll() {
         return Actor.obtenerTodos();
@@ -28,10 +26,6 @@ public class ActorDAO {
 
     /**
      * Crea un nuevo actor
-     * 
-     * @param nombre Nombre del actor
-     * @param apellido Apellido del actor
-     * @return Nueva instancia de Actor
      */
     public Actor create(String nombre, String apellido) {
         return new Actor(nombre, apellido);
@@ -39,9 +33,6 @@ public class ActorDAO {
 
     /**
      * Obtiene un actor por su ID
-     * 
-     * @param id ID del actor
-     * @return Actor correspondiente o null si no existe
      */
     public Actor getById(int id) {
         String sql = "SELECT id FROM Actores WHERE id = " + id;
@@ -55,9 +46,6 @@ public class ActorDAO {
 
     /**
      * Elimina un actor por su ID
-     * 
-     * @param id ID del actor a eliminar
-     * @return true si se eliminó correctamente
      */
     public boolean delete(int id) {
         Actor actor = getById(id);
@@ -70,9 +58,6 @@ public class ActorDAO {
 
     /**
      * Busca actores que participan en una serie
-     * 
-     * @param serieId ID de la serie
-     * @return Lista de actores que participan en la serie
      */
     public List<Actor> findBySerie(int serieId) {
         AppData appData = AppData.getInstance();

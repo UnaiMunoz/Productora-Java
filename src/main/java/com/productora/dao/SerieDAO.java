@@ -19,8 +19,6 @@ public class SerieDAO {
 
     /**
      * Obtiene todas las series de la base de datos
-     * 
-     * @return Lista de todas las series
      */
     public List<Serie> getAll() {
         return Serie.obtenerTodas();
@@ -28,9 +26,6 @@ public class SerieDAO {
 
     /**
      * Busca series por título
-     * 
-     * @param titulo Texto a buscar en el título
-     * @return Lista de series que coinciden
      */
     public List<Serie> findByTitle(String titulo) {
         return Serie.buscarPorTitulo(titulo);
@@ -38,9 +33,6 @@ public class SerieDAO {
 
     /**
      * Crea una nueva serie
-     * 
-     * @param titulo Título de la serie
-     * @return Nueva instancia de Serie
      */
     public Serie create(String titulo) {
         return new Serie(titulo);
@@ -48,9 +40,6 @@ public class SerieDAO {
 
     /**
      * Obtiene una serie por su ID
-     * 
-     * @param id ID de la serie
-     * @return Serie correspondiente o null si no existe
      */
     public Serie getById(int id) {
         String sql = "SELECT id FROM Series WHERE id = " + id;
@@ -64,9 +53,6 @@ public class SerieDAO {
 
     /**
      * Elimina una serie por su ID
-     * 
-     * @param id ID de la serie a eliminar
-     * @return true si se eliminó correctamente
      */
     public boolean delete(int id) {
         Serie serie = getById(id);
@@ -78,9 +64,6 @@ public class SerieDAO {
 
     /**
      * Busca series por género
-     * 
-     * @param genero Género a buscar
-     * @return Lista de series del género especificado
      */
     public List<Serie> findByGenre(String genero) {
         AppData appData = AppData.getInstance();
@@ -98,9 +81,6 @@ public class SerieDAO {
 
     /**
      * Obtiene las series mejor valoradas
-     * 
-     * @param limit Número máximo de series a retornar
-     * @return Lista de series ordenadas por rating descendente
      */
     public List<Serie> getTopRated(int limit) {
         AppData appData = AppData.getInstance();

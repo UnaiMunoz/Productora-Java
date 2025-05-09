@@ -26,12 +26,6 @@ public class ActorSerie {
 
     /**
      * Constructor para crear una nueva relación entre actor y serie
-     * 
-     * @param actorId ID del actor
-     * @param serieId ID de la serie
-     * @param personaje Nombre del personaje
-     * @param rol Rol del actor (protagonista, secundario, etc.)
-     * @param temporadasParticipacion Temporadas en las que participa (formato: "1,2,3")
      */
     public ActorSerie(int actorId, int serieId, String personaje, String rol, String temporadasParticipacion) {
         this.actorId = actorId;
@@ -57,8 +51,6 @@ public class ActorSerie {
 
     /**
      * Constructor para cargar una relación existente
-     * 
-     * @param id Identificador de la relación
      */
     public ActorSerie(int id) {
         this.id = id;
@@ -121,8 +113,6 @@ public class ActorSerie {
 
     /**
      * Elimina la relación de la base de datos
-     * 
-     * @return true si se eliminó correctamente
      */
     public boolean delete() {
         try {
@@ -137,8 +127,6 @@ public class ActorSerie {
 
     /**
      * Obtiene el objeto Actor asociado
-     * 
-     * @return Actor
      */
     public Actor getActor() {
         return new Actor(this.actorId);
@@ -221,9 +209,6 @@ public class ActorSerie {
 
     /**
      * Obtiene todas las participaciones de un actor
-     * 
-     * @param actorId ID del actor
-     * @return ArrayList con todas las participaciones
      */
     public static ArrayList<ActorSerie> obtenerPorActor(int actorId) {
         AppData appData = AppData.getInstance();
@@ -241,9 +226,6 @@ public class ActorSerie {
 
     /**
      * Obtiene todas las participaciones en una serie
-     * 
-     * @param serieId ID de la serie
-     * @return ArrayList con todas las participaciones
      */
     public static ArrayList<ActorSerie> obtenerPorSerie(int serieId) {
         AppData appData = AppData.getInstance();
