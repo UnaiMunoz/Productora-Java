@@ -235,27 +235,6 @@ public class AppData {
     }
     
     /**
-     * Ejecuta una consulta SQL y devuelve un único valor
-     */
-    public Object queryScalar(String sql) {
-        if (conn == null) {
-            logger.severe("No hay conexión a la base de datos para consultar valor escalar");
-            return null;
-        }
-        
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            if (rs.next()) {
-                return rs.getObject(1);
-            }
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al ejecutar consulta escalar: " + sql, e);
-        }
-        
-        return null;
-    }
-    
-    /**
      * Comprueba si la conexión está activa
      */
     public boolean isConnected() {

@@ -26,20 +26,6 @@ public class EpisodioDAO {
     }
 
     /**
-     * Obtiene todos los episodios de una serie
-     */
-    public List<Episodio> getAllBySerie(int serieId) {
-        return Episodio.obtenerPorSerie(serieId);
-    }
-
-    /**
-     * Busca episodios por título
-     */
-    public List<Episodio> findByTitle(String titulo) {
-        return Episodio.buscarPorTitulo(titulo);
-    }
-
-    /**
      * Crea un nuevo episodio
      */
     public Episodio create(int temporadaId, int numero, String titulo) {
@@ -83,24 +69,6 @@ public class EpisodioDAO {
             return result;
         }
         return false;
-    }
-
-
-    /**
-     * Obtiene los episodios mejor valorados
-     */
-    public List<Episodio> getTopRated(int limit) {
-        AppData appData = AppData.getInstance();
-        String sql = "SELECT id FROM Episodios WHERE rating IS NOT NULL ORDER BY rating DESC LIMIT " + limit;
-        ArrayList<HashMap<String, Object>> resultado = appData.query(sql);
-        ArrayList<Episodio> episodios = new ArrayList<>();
-
-        for (HashMap<String, Object> row : resultado) {
-            int id = ((Number) row.get("id")).intValue();
-            episodios.add(new Episodio(id));
-        }
-
-        return episodios;
     }
 
     /**

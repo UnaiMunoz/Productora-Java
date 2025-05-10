@@ -54,25 +54,4 @@ public class ActorDAO {
         }
         return false;
     }
-
-
-    /**
-     * Busca actores que participan en una serie
-     */
-    public List<Actor> findBySerie(int serieId) {
-        AppData appData = AppData.getInstance();
-        String sql = "SELECT DISTINCT a.id FROM Actores a " +
-                     "JOIN ActoresSeries acs ON a.id = acs.actor_id " +
-                     "WHERE acs.serie_id = " + serieId + " " +
-                     "ORDER BY a.nombre, a.apellido";
-        ArrayList<HashMap<String, Object>> resultado = appData.query(sql);
-        ArrayList<Actor> actores = new ArrayList<>();
-
-        for (HashMap<String, Object> row : resultado) {
-            int id = ((Number) row.get("id")).intValue();
-            actores.add(new Actor(id));
-        }
-
-        return actores;
-    }
 }

@@ -23,12 +23,7 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            //Image logo = new Image(getClass().getResourceAsStream("/images/logo.png"));
-            //logoImageView.setImage(logo);
-        } catch (Exception e) {
-            System.out.println("No se pudo cargar la imagen del logo: " + e.getMessage());
-        }
+        
     }
 
     @FXML

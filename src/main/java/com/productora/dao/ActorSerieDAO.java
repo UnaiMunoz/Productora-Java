@@ -61,38 +61,4 @@ public class ActorSerieDAO {
         }
         return false;
     }
-
-    /**
-     * Busca participaciones por personaje
-     */
-    public List<ActorSerie> findByCharacter(String personaje) {
-        AppData appData = AppData.getInstance();
-        String sql = "SELECT id FROM ActoresSeries WHERE personaje LIKE '%" + personaje + "%' ORDER BY personaje";
-        ArrayList<HashMap<String, Object>> resultado = appData.query(sql);
-        ArrayList<ActorSerie> participaciones = new ArrayList<>();
-
-        for (HashMap<String, Object> row : resultado) {
-            int id = ((Number) row.get("id")).intValue();
-            participaciones.add(new ActorSerie(id));
-        }
-
-        return participaciones;
-    }
-
-    /**
-     * Busca participaciones por rol
-     */
-    public List<ActorSerie> findByRole(String rol) {
-        AppData appData = AppData.getInstance();
-        String sql = "SELECT id FROM ActoresSeries WHERE rol LIKE '%" + rol + "%' ORDER BY personaje";
-        ArrayList<HashMap<String, Object>> resultado = appData.query(sql);
-        ArrayList<ActorSerie> participaciones = new ArrayList<>();
-
-        for (HashMap<String, Object> row : resultado) {
-            int id = ((Number) row.get("id")).intValue();
-            participaciones.add(new ActorSerie(id));
-        }
-
-        return participaciones;
-    }
 }

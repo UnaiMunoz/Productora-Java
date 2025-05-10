@@ -61,38 +61,4 @@ public class SerieDAO {
         }
         return false;
     }
-
-    /**
-     * Busca series por género
-     */
-    public List<Serie> findByGenre(String genero) {
-        AppData appData = AppData.getInstance();
-        String sql = "SELECT id FROM Series WHERE genero LIKE '%" + genero + "%' ORDER BY titulo";
-        ArrayList<HashMap<String, Object>> resultado = appData.query(sql);
-        ArrayList<Serie> series = new ArrayList<>();
-
-        for (HashMap<String, Object> row : resultado) {
-            int id = ((Number) row.get("id")).intValue();
-            series.add(new Serie(id));
-        }
-
-        return series;
-    }
-
-    /**
-     * Obtiene las series mejor valoradas
-     */
-    public List<Serie> getTopRated(int limit) {
-        AppData appData = AppData.getInstance();
-        String sql = "SELECT id FROM Series WHERE rating IS NOT NULL ORDER BY rating DESC LIMIT " + limit;
-        ArrayList<HashMap<String, Object>> resultado = appData.query(sql);
-        ArrayList<Serie> series = new ArrayList<>();
-
-        for (HashMap<String, Object> row : resultado) {
-            int id = ((Number) row.get("id")).intValue();
-            series.add(new Serie(id));
-        }
-
-        return series;
-    }
 }
